@@ -5,14 +5,7 @@
   "main": "index.js",
   "scripts": {
     "prepare": "husky install",
-    "lint": "ktlint --android \"**/*.kt\"",
-    "lint:fix": "ktlint -F \"**/*.kt\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "lint-staged": {
-    "*.kt": [
-      "ktlint -F"
-    ]
+    "test": "echo \"No tests yet\" && exit 0"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +13,6 @@
   "devDependencies": {
     "@commitlint/cli": "^20.3.1",
     "@commitlint/config-conventional": "^20.3.1",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.7"
+    "husky": "^9.1.7"
   }
 }

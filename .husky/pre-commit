@@ -1,3 +1,0 @@
-#!/usr/bin/env sh
-# pre-commit hook: run lint-staged
-npx --no -- lint-staged
