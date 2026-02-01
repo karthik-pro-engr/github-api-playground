@@ -8,6 +8,6 @@ import javax.inject.Inject
 class GetUserReposUseCase @Inject constructor(
     private val repository: GithubRepository
 ) {
-    operator fun invoke(username: String, perPage: Int = 30, page: Int = 1): Flow<List<Repo>> =
+    suspend operator fun invoke(username: String, perPage: Int = 30, page: Int = 1): Flow<List<Repo>> =
         repository.getUserRepos(username, perPage, page)
 }
