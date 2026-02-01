@@ -49,6 +49,9 @@ dependencies {
     implementation(libs.okhttp.core)
     implementation(libs.okhttp.logging)
 
+    // Allow @Inject (javax) without bringing Hilt runtime here
+    implementation("javax.inject:javax.inject:1")
+
     implementation(project(":domain"))
 
     testImplementation(libs.junit)
