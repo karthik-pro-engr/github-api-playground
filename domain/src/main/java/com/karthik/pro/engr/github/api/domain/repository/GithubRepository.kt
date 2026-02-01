@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface GithubRepository {
-    suspend fun getUserRepos(username: String, perPage: Int = 30, page: Int = 1): Flow<List<Repo>>
+    fun getUserRepos(username: String, perPage: Int = 30, page: Int = 1): Flow<List<Repo>>
 }
