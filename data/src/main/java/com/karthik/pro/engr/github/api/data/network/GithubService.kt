@@ -6,7 +6,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface GithubService {
-    @GET("users/{userame}/repos")
+    @GET("users/{username}/repos")
     suspend fun listUserRepos(
         @Path("username") username: String,
         @Query("per_page") perPage: Int = 30,
