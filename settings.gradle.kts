@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 rootProject.name = "github-api-playground"
 include(":app")
 include(":domain")
+include(":data")
