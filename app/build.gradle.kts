@@ -48,6 +48,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
+    implementation(project(":data"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -60,10 +62,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 
-    implementation(libs.retrofit.core)
-    implementation(libs.retrofit.gson)
-    implementation(libs.okhttp.core)
-    implementation(libs.okhttp.logging)
+
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
@@ -87,8 +86,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.okhttp.mockwebserver)
-    testImplementation(libs.truth)
+
 }
 kapt {
     correctErrorTypes = true
