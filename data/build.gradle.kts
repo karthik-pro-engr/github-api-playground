@@ -53,7 +53,6 @@ dependencies {
     implementation("javax.inject:javax.inject:1")
 
     implementation(project(":domain"))
-    implementation(project(":common"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
