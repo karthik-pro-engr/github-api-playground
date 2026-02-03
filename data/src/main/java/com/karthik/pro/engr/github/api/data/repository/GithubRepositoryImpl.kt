@@ -1,7 +1,7 @@
 package com.karthik.pro.engr.github.api.data.repository
 
 import com.karthik.pro.engr.github.api.data.mapper.RepoMapper
-import com.karthik.pro.engr.github.api.data.network.GithubService
+import com.karthik.pro.engr.github.api.data.remote.GithubService
 import com.karthik.pro.engr.github.api.domain.model.Repo
 import com.karthik.pro.engr.github.api.domain.repository.GithubRepository
 import kotlinx.coroutines.Dispatchers

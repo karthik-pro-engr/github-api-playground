@@ -1,4 +1,4 @@
-package com.karthik.pro.engr.github.api.data.network.dto
+package com.karthik.pro.engr.github.api.data.remote.dto
 
 data class GitHubRepoDto(
     val id: Long,
