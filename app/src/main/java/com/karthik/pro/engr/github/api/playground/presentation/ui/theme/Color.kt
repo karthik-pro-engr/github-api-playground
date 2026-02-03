@@ -1,4 +1,4 @@
-package com.karthik.pro.engr.github.api.playground.ui.theme
+package com.karthik.pro.engr.github.api.playground.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
