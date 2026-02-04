@@ -6,7 +6,7 @@ import com.karthik.pro.engr.github.api.domain.error.DomainError
 import com.karthik.pro.engr.github.api.domain.model.Repo
 import com.karthik.pro.engr.github.api.domain.result.Result
 import com.karthik.pro.engr.github.api.domain.usecase.GetUserReposUseCase
-import com.karthik.pro.engr.github.api.playground.presentation.ui.state.UiState
+import com.karthik.pro.engr.github.api.playground.presentation.repos.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

@@ -1,4 +1,4 @@
-package com.karthik.pro.engr.github.api.playground.presentation.ui.state
+package com.karthik.pro.engr.github.api.playground.presentation.repos
 
 sealed class UiState<out T> {
     object Idle : UiState<Nothing>()
