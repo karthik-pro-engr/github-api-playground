@@ -29,6 +29,8 @@ room = "2.8.4"
 compose-ui = "1.10.2"
 hilt-navigation-compose = "1.3.0"
 
+allVariantsPreview = "0.3.0-rc1"
+
 # Testing
 truth = "1.4.5"
 jetbrainsKotlinJvm = "2.3.0"
@@ -51,6 +53,9 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+all-variants-preview = { group = "io.github.karthik-pro-engr", name = "preview", version.ref = "allVariantsPreview" }
+
 
 # --- Coroutines ---
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib" }
