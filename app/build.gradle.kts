@@ -2,8 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("org.jetbrains.kotlin.kapt")
     alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
+    kotlin("kapt")
 
 }
 
@@ -79,6 +80,8 @@ dependencies {
 
 
     implementation(libs.hilt.navigation.compose)
+
+    implementation(libs.all.variants.preview)
 
 
     testImplementation(libs.junit)
