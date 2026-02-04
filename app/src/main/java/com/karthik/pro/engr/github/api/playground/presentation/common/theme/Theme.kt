@@ -1,4 +1,4 @@
-package com.karthik.pro.engr.github.api.playground.presentation.ui.theme
+package com.karthik.pro.engr.github.api.playground.presentation.common.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
