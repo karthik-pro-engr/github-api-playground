@@ -1,6 +1,8 @@
 package com.karthik.pro.engr.github.api.playground.presentation.repos
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -40,11 +43,17 @@ fun RepoListScreen(
             .padding(16.dp)
     ) {
 
-        Row {
+        Row(
+            modifier = modifier.padding(5.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             OutlinedTextField(
                 value = username,
                 onValueChange = { username = it },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .height(IntrinsicSize.Min),
                 label = { Text("GitHub username") }
             )
 
@@ -65,9 +74,12 @@ fun RepoListScreen(
                 Text(state.message, color = Color.Red)
 
             is UiState.Success ->
-                LazyColumn {
-                    items(state.data) { RepoListItem(repo = it) }
-                }
+                if (state.data.isEmpty())
+                    Text("No repos found", color = Color.Magenta)
+                else
+                    LazyColumn {
+                        items(state.data) { RepoListItem(repo = it) }
+                    }
         }
     }
 
