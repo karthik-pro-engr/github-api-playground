@@ -29,7 +29,7 @@ fun RepoListItem(modifier: Modifier = Modifier, repo: Repo) {
         )
         repo.description?.let {
             Text(
-                text = it, style = MaterialTheme.typography.bodySmall,
+                text = it, style = MaterialTheme.typography.bodyMedium,
                 maxLines = 3,
                 overflow = TextOverflow.Ellipsis
             )
