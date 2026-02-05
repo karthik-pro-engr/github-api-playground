@@ -24,12 +24,12 @@ fun RepoListItem(modifier: Modifier = Modifier, repo: Repo) {
     Column(
         Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(top = 8.dp, start = 8.dp, end = 8.dp)
     ) {
         Text(
             repo.fullName,
             style = MaterialTheme.typography.titleMedium,
-            modifier = modifier.padding(5.dp)
+            modifier = Modifier.padding(5.dp)
         )
         repo.description?.let {
             Text(
@@ -42,7 +42,7 @@ fun RepoListItem(modifier: Modifier = Modifier, repo: Repo) {
             Text(
                 "⭐ ${repo.stars}",
                 style = MaterialTheme.typography.bodySmall,
-                modifier = modifier.padding(5.dp)
+                modifier = Modifier.padding(5.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
