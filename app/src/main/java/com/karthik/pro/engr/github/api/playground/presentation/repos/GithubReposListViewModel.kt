@@ -21,6 +21,7 @@ class GithubReposListViewModel @Inject constructor(private val useCase: GetUserR
 
     fun loadRepos(username: String) {
         viewModelScope.launch {
+            _uiState.value = UiState.Loading
             useCase(username).collect { result ->
                 _uiState.value = when (result) {
                     is Result.Failure -> UiState.Error(mapError(result.error))
