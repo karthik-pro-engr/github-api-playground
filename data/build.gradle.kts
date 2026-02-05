@@ -55,6 +55,7 @@ dependencies {
     implementation(project(":domain"))
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     testImplementation(libs.okhttp.mockwebserver)
