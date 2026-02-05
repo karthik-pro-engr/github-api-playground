@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -20,7 +21,11 @@ fun RepoListItem(modifier: Modifier = Modifier, repo: Repo) {
             .fillMaxWidth()
             .padding(8.dp)
     ) {
-        Text(repo.fullName, modifier = modifier.padding(5.dp))
+        Text(
+            repo.fullName,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = modifier.padding(5.dp)
+        )
         Text("⭐ ${repo.stars}", modifier = modifier.padding(5.dp))
         Text(repo.language ?: "-", modifier = modifier.padding(5.dp))
         Divider()
