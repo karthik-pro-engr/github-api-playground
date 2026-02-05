@@ -68,7 +68,7 @@ fun RepoListScreen(
 
         when (state) {
             UiState.Idle -> Text("Enter username")
-            UiState.Loading -> CircularProgressIndicator()
+            UiState.Loading -> CircularProgressIndicator(modifier = modifier.align(Alignment.CenterHorizontally))
 
             is UiState.Error ->
                 Text(state.message, color = Color.Red)
