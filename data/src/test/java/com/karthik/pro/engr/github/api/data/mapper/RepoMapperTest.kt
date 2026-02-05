@@ -1,0 +1,35 @@
+package com.karthik.pro.engr.github.api.data.mapper
+
+import com.google.common.truth.Truth.assertThat
+import com.karthik.pro.engr.github.api.data.remote.dto.GitHubOwnerDto
+import com.karthik.pro.engr.github.api.data.remote.dto.GitHubRepoDto
+import org.junit.Test
+
+class RepoMapperTest {
+
+    @Test
+    fun `maps GithubRepoDto to domain Repo correctly`() {
+        val dto = GitHubRepoDto(
+            id = 123,
+            name = "compose-playground",
+            full_name = "karthik-pro-engr/compose-playground",
+            description = "A demo",
+            stargazers_count = 42,
+            language = "Kotlin",
+            forks_count = 0,
+            owner = GitHubOwnerDto(
+                login = "karthik-pro-engr",
+                id = 1,
+                avatar_url = "https://avatars.githubusercontent.com/u/101930095?v=4",
+                html_url = "https://github.com/karthik-pro-engr"
+            ),
+            html_url = "https://github.com/karthik-pro-engr"
+        )
+        val domainRepo = RepoMapper.fromDto(dto)
+        assertThat(domainRepo.id).isEqualTo(123)
+        assertThat(domainRepo.name).isEqualTo("compose-playground")
+        assertThat(domainRepo.owner.login).isEqualTo("karthik-pro-engr")
+        assertThat(domainRepo.stars).isEqualTo(42)
+        assertThat(domainRepo.language).isEqualTo("Kotlin")
+    }
+}
