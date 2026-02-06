@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.javax.inject)
 
     implementation(project(":domain"))
+    implementation(project(":core"))
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
