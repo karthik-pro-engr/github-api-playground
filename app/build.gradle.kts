@@ -33,9 +33,9 @@ android {
     signingConfigs {
         create("release") {
             storeFile = file("release.jks")
-            storePassword = System.getenv("RELEASE_STORE_PASSWORD")
-            keyAlias = System.getenv("RELEASE_KEY_ALIAS")
-            keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+            storePassword = System.getenv("GITHUB_RELEASE_STORE_PASSWORD")
+            keyAlias = System.getenv("GITHUB_RELEASE_KEY_ALIAS")
+            keyPassword = System.getenv("GITHUB_RELEASE_KEY_PASSWORD")
         }
     }
 
@@ -80,7 +80,9 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
+
 }
 
 firebaseAppDistribution {
@@ -108,9 +110,9 @@ firebaseAppDistribution {
 
 tasks.register("prepareFirebaseCredentials") {
     doFirst {
-        val credentials = System.getenv("FIREBASE_SERVICE_ACCOUNT_JSON")
+        val credentials = System.getenv("GITHUB_FIREBASE_SERVICE_ACCOUNT_JSON")
         val file = File("${project.projectDir}/firebase-service-account.json")
-        file.writeText(credentials ?: error("Missing FIREBASE_SERVICE_ACCOUNT_JSON"))
+        file.writeText(credentials ?: error("Missing GITHUB_FIREBASE_SERVICE_ACCOUNT_JSON"))
         println("✅ Firebase credentials written to ${file.absolutePath}")
     }
 }
