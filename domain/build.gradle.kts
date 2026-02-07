@@ -17,5 +17,6 @@ dependencies {
     implementation (libs.kotlinx.coroutines.core)
     testImplementation (libs.junit)
     implementation(libs.javax.inject)
-
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
 }
