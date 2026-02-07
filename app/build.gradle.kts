@@ -179,6 +179,9 @@ dependencies {
 
     implementation(libs.all.variants.preview)
 
+    implementation(libs.firebase.feedback.api)
+    betaImplementation(libs.karthik.pro.engr.firebase.feedback.impl)
+
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
