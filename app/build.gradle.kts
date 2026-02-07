@@ -4,6 +4,9 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.firebase.appdistribution)
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
     kotlin("kapt")
 
 }
@@ -49,6 +52,11 @@ android {
 }
 
 dependencies {
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(libs.androidx.core.ktx)

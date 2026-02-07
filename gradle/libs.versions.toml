@@ -10,6 +10,8 @@ kotlinxCoroutinesCore = "1.7.0"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.12.3"
 composeBom = "2026.01.01"
+firebaseBom = "33.2.0"
+firebase = "5.1.1"
 # Kotlin / Coroutines
 coroutines = "1.10.2"
 ksp = "2.3.0"
@@ -55,6 +57,9 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 
 all-variants-preview = { group = "io.github.karthik-pro-engr", name = "preview", version.ref = "allVariantsPreview" }
 
@@ -105,4 +110,5 @@ jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrai
 android-library = { id = "com.android.library", version.ref = "agp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kapt" }
+firebase-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebase" }
 
