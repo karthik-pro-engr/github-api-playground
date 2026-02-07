@@ -110,9 +110,16 @@ firebaseAppDistribution {
 
 tasks.register("prepareFirebaseCredentials") {
     doFirst {
-        val credentials = System.getenv("GITHUB_FIREBASE_SERVICE_ACCOUNT_JSON")
+        val base64Credentials = System.getenv("GITHUB_FIREBASE_SERVICE_ACCOUNT_JSON")
         val file = File("${project.projectDir}/firebase-service-account.json")
-        file.writeText(credentials ?: error("Missing GITHUB_FIREBASE_SERVICE_ACCOUNT_JSON"))
+        file.writeText(base64Credentials ?: error("Missing GITHUB_FIREBASE_SERVICE_ACCOUNT_JSON"))
+        if (base64Credentials.isNullOrBlank()) {
+            error("❌ GITHUB_FIREBASE_SERVICE_ACCOUNT_JSON is missing or empty")
+        }
+
+        val decoded = Base64.getDecoder().decode(base64Credentials)
+        file.writeBytes(decoded)
+
         println("✅ Firebase credentials written to ${file.absolutePath}")
     }
 }
