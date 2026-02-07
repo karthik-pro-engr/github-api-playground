@@ -1,0 +1,170 @@
+name: Firebase App Distribution
+
+# Trigger workflow only on version tags like v1.0.0, v1.0.1
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build-and-distribute:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # expose token to gradle
+      GITHUB_ACTOR: ${{ github.actor }}           # username for auth (usually the actor)
+
+    steps:
+      # Checkout repo
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Write google-services.json (if secret present)
+        if: ${{ github.event_name != 'pull_request' || github.repository == github.event.pull_request.head.repo.full_name }}
+        run: |
+          if [ -z "$GOOGLE_SERVICES_JSON" ]; then
+            echo "GOOGLE_SERVICES_JSON secret is empty — skipping write. Build may fail if file is required."
+            exit 0
+          fi
+          mkdir -p "$GITHUB_WORKSPACE/app"
+          printf '%s' "$GOOGLE_SERVICES_JSON" > "$GITHUB_WORKSPACE/app/google-services.json"
+          chmod 600 "$GITHUB_WORKSPACE/app/google-services.json"
+          echo "Wrote app/google-services.json (size: $(wc -c < $GITHUB_WORKSPACE/app/google-services.json) bytes)"
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+
+
+          # Set up JDK (required for Gradle & Android builds)
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      # Decode Firebase service account from secret
+      - name: Decode Firebase service account
+        run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}" > app/firebase-service-account.json
+
+      # Debug file is existing or not
+      - name: Verify Firebase service account file
+        run: |
+            echo "Checking if firebase-service-account.json exists in app/"
+            ls -l app/firebase-service-account.json
+            echo "File contents (first 2 lines for safety check):"
+            head -n 2 app/firebase-service-account.json
+
+      # Decode Base64 release keystore from secret
+      - name: Decode release keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > release.jks
+
+      # Set Gradle signing environment variables
+      - name: Set signing properties
+        run: |
+          echo "RELEASE_STORE_PASSWORD=${{ secrets.RELEASE_STORE_PASSWORD }}" >> $GITHUB_ENV
+          echo "RELEASE_KEY_ALIAS=${{ secrets.RELEASE_KEY_ALIAS }}" >> $GITHUB_ENV
+          echo "RELEASE_KEY_PASSWORD=${{ secrets.RELEASE_KEY_PASSWORD }}" >> $GITHUB_ENV
+
+      # Extract versionName from Git tag
+      - name: Set versionName from Git tag
+        run: |
+          echo "VERSION_NAME=${GITHUB_REF_NAME#refs/tags/}" >> $GITHUB_ENV
+          echo "Git tag ${GITHUB_REF_NAME#refs/tags/} applied as versionName"
+
+      # Enable Gradle caching for speed
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper/
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+
+      # Prepare release Keystore
+      - name: Prepare release keystore
+        run: ./gradlew :app:prepareReleaseKeystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+
+      - name: Write google-services.json
+        run: |
+          echo "$GOOGLE_SERVICES_JSON" > $GITHUB_WORKSPACE/app/google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+
+      - name: Build Beta APK
+        run: ./gradlew assembleBeta -PversionName=$VERSION_NAME
+
+
+      # Listing the files
+      - name: Find APK
+        id: find_apk
+        run: |
+          echo "Searching for apk under app/..."
+          APK=$(find app -type f -name "*.apk" | egrep -i "beta|release|debug" | head -n1)
+          if [ -z "$APK" ]; then echo "No APK found" && exit 1; fi
+          echo "Found: $APK"
+          echo "apk_path=$APK" >> $GITHUB_OUTPUT
+
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-apk
+          path: ${{ steps.find_apk.outputs.apk_path }}
+
+      # Generate SHA256 checksum
+      - name: Generate SHA256 checksum for beta APK
+        run: |
+          set -euo pipefail
+          
+          # 1) Try to find an APK that has "beta" in the filename (case-insensitive),
+          #    prefer the most-recent one.
+          APK=$(find app/build/outputs/apk -type f -iname "*beta*.apk" -print0 \
+                | xargs -0 --no-run-if-empty ls -t 2>/dev/null \
+                | head -n1 || true)
+          
+          # 2) Fallback: if none found, pick the newest .apk under outputs/apk
+          if [ -z "$APK" ]; then
+            APK=$(find app/build/outputs/apk -type f -name "*.apk" -print0 \
+                  | xargs -0 --no-run-if-empty ls -t 2>/dev/null \
+                  | head -n1 || true)
+          fi
+          
+          # 3) Fail if still nothing
+          if [ -z "$APK" ]; then
+            echo "ERROR: No APK found under app/build/outputs/apk" >&2
+            exit 1
+          fi
+          
+          echo "Using APK: $APK"
+          sha256sum "$APK" > "${APK}.sha256"
+          echo "Created checksum: ${APK}.sha256"
+
+      - name: Debug service account file
+        run: |
+          echo "Listing contents of app/"
+          ls -l app/
+          echo "Previewing service account file:"
+          head -n 2 app/firebase-service-account.json
+
+        # ✅ Confirm file exists before upload
+      - name: Fail if service account file missing
+        run: test -f app/firebase-service-account.json || (echo "Missing service account file!" && exit 1)
+
+      - name: Prepare Firebase credentials
+        run: ./gradlew prepareFirebaseCredentials
+        env:
+          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
+
+      # Upload signed APK to Firebase App Distribution
+      - name: Upload to Firebase
+        run: ./gradlew appDistributionUploadBeta
+
+
+      # Slack notification (optional)
+      # - name: Notify Slack
+      #  if: success()
+      #  run: |
+      #        curl -X POST -H 'Content-type: application/json' \
+      #       --data "{\"text\":\"Release $VERSION_NAME uploaded to Firebase successfully!\"}" \
+       #       ${{ secrets.SLACK_WEBHOOK_URL }}
+
