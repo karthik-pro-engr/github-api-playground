@@ -38,13 +38,13 @@ fun RepoListScreen(
     var username by remember { mutableStateOf("") }
 
     Column(
-        Modifier
+        modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
 
         Row(
-            modifier = modifier.padding(5.dp),
+            modifier = Modifier.padding(5.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -68,7 +68,7 @@ fun RepoListScreen(
 
         when (state) {
             UiState.Idle -> Text("Enter username")
-            UiState.Loading -> CircularProgressIndicator(modifier = modifier.align(Alignment.CenterHorizontally))
+            UiState.Loading -> CircularProgressIndicator(modifier = Modifier.align(Alignment.CenterHorizontally))
 
             is UiState.Error ->
                 Text(state.message, color = Color.Red)
