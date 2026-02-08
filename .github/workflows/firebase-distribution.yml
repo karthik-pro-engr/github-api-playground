@@ -26,7 +26,7 @@ jobs:
             exit 0
           fi
           mkdir -p "$GITHUB_WORKSPACE/app"
-          printf '%s' "$GOOGLE_SERVICES_JSON" > "$GITHUB_WORKSPACE/app/google-services.json"
+          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > "$GITHUB_WORKSPACE/app/google-services.json"
           chmod 600 "$GITHUB_WORKSPACE/app/google-services.json"
           echo "Wrote app/google-services.json (size: $(wc -c < $GITHUB_WORKSPACE/app/google-services.json) bytes)"
         env:
@@ -42,7 +42,7 @@ jobs:
 
       # Decode Firebase service account from secret
       - name: Decode Firebase service account
-        run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}" > app/firebase-service-account.json
+        run: echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}" | base64 --decode > app/firebase-service-account.json
 
       # Debug file is existing or not
       - name: Verify Firebase service account file
