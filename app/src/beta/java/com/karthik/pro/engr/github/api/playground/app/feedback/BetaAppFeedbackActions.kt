@@ -2,7 +2,6 @@ package com.karthik.pro.engr.github.api.playground.app.feedback
 
 import android.content.Context
 import com.karthik.pro.engr.feedback.impl.ui.viewmodel.FeedbackViewModel
-import com.karthik.pro.engr.github.api.playground.app.di.BetaFeedback
 import javax.inject.Inject
 
 class BetaAppFeedbackActions @Inject constructor(@param:BetaFeedback val vm: FeedbackViewModel) : FeedbackActions {

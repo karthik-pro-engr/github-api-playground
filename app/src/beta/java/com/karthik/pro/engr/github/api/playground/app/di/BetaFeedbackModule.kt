@@ -7,6 +7,7 @@ import com.karthik.pro.engr.feedback.impl.FeedbackViewModelFactory
 import com.karthik.pro.engr.feedback.impl.FirebaseFeedbackSender
 import com.karthik.pro.engr.feedback.impl.ui.viewmodel.FeedbackViewModel
 import com.karthik.pro.engr.github.api.playground.BuildConfig
+import com.karthik.pro.engr.github.api.playground.app.feedback.BetaFeedback
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

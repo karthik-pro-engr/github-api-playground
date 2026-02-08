@@ -2,14 +2,12 @@ package com.karthik.pro.engr.github.api.data.repository
 
 import com.google.common.truth.Truth.assertThat
 import com.karthik.pro.engr.github.api.data.remote.GithubService
-import com.karthik.pro.engr.github.api.data.remote.dto.GitHubRepoDto
 import com.karthik.pro.engr.github.api.data.util.FakeResponseLoader
 import com.karthik.pro.engr.github.api.domain.model.Repo
 import com.karthik.pro.engr.github.api.domain.result.Result
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runTest
 import mockwebserver3.MockResponse
 import mockwebserver3.MockWebServer
 import okhttp3.OkHttpClient

@@ -1,15 +1,13 @@
 package com.karthik.pro.engr.github.api.playground.di
 
-import com.karthik.pro.engr.github.api.playground.app.di.DefaultFeedback
 import com.karthik.pro.engr.github.api.playground.app.feedback.AppFeedbackController
+import com.karthik.pro.engr.github.api.playground.app.feedback.DefaultFeedback
 import com.karthik.pro.engr.github.api.playground.app.feedback.FeedbackActions
 import com.karthik.pro.engr.github.api.playground.app.feedback.NoOpAppFeedbackActions
 import com.karthik.pro.engr.github.api.playground.app.feedback.NoOpAppFeedbackController
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
-import dagger.hilt.android.scopes.ActivityScoped
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 

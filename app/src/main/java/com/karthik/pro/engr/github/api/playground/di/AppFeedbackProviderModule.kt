@@ -1,9 +1,9 @@
 package com.karthik.pro.engr.github.api.playground.di
 
 import com.karthik.pro.engr.github.api.playground.BuildConfig
-import com.karthik.pro.engr.github.api.playground.app.di.BetaFeedback
-import com.karthik.pro.engr.github.api.playground.app.di.DefaultFeedback
 import com.karthik.pro.engr.github.api.playground.app.feedback.AppFeedbackController
+import com.karthik.pro.engr.github.api.playground.app.feedback.BetaFeedback
+import com.karthik.pro.engr.github.api.playground.app.feedback.DefaultFeedback
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

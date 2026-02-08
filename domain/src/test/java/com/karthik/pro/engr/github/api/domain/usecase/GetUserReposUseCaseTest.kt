@@ -2,7 +2,6 @@ package com.karthik.pro.engr.github.api.domain.usecase
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
-import com.karthik.pro.engr.github.api.domain.error.DomainError
 import com.karthik.pro.engr.github.api.domain.model.Owner
 import com.karthik.pro.engr.github.api.domain.model.Repo
 import com.karthik.pro.engr.github.api.domain.repository.GithubRepository
