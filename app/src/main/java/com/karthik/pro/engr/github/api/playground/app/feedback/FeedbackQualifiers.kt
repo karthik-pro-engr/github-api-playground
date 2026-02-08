@@ -1,4 +1,4 @@
-package com.karthik.pro.engr.github.api.playground.app.di
+package com.karthik.pro.engr.github.api.playground.app.feedback
 
 import javax.inject.Qualifier
 
