@@ -16,11 +16,9 @@ import dagger.hilt.android.scopes.ActivityScoped
 abstract class BetaBindModule {
     @Binds
     @ActivityScoped
-    @BetaFeedback
     abstract fun bindBetaFeedbackActions(impl: BetaAppFeedbackActions): FeedbackActions
 
     @Binds
     @ActivityScoped
-    @BetaFeedback
     abstract fun bindBetaFeedbackController(impl: BetaAppFeedbackController): AppFeedbackController
 }

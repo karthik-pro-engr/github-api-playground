@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 class BetaAppFeedbackController @Inject constructor(
-    @param:BetaFeedback val vm: FeedbackViewModel,
-    @param:BetaFeedback val actions: FeedbackActions
+    val vm: FeedbackViewModel,
+    val actions: FeedbackActions
 ) : AppFeedbackController {
 
     override val uiState: StateFlow<FeedbackUiState> = vm.uiState

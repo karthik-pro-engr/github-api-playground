@@ -4,7 +4,7 @@ import android.content.Context
 import com.karthik.pro.engr.feedback.impl.ui.viewmodel.FeedbackViewModel
 import javax.inject.Inject
 
-class BetaAppFeedbackActions @Inject constructor(@param:BetaFeedback val vm: FeedbackViewModel) : FeedbackActions {
+class BetaAppFeedbackActions @Inject constructor(val vm: FeedbackViewModel) : FeedbackActions {
     override fun launchFeedbackEmail(context: Context, email: String) {
         vm.launchFeedbackEmail(context, email)
     }

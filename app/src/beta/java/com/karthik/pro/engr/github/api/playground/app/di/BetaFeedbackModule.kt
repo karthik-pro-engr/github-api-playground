@@ -20,7 +20,6 @@ import dagger.hilt.android.scopes.ActivityScoped
 object BetaFeedbackModule {
     @Provides
     @ActivityScoped
-    @BetaFeedback
     fun provideFeedbackViewModel(@ActivityContext context: Context): FeedbackViewModel {
         // Only provide Beta controller at activity scope when beta is enabled
         if (!BuildConfig.ENABLE_APP_DISTRIBUTION) {

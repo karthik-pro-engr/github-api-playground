@@ -79,7 +79,7 @@ fun SetContent(
             topBar = {
                 TopAppBar(
                     title = { Text("Github Repositories") },
-                    colors = TopAppBarDefaults.mediumTopAppBarColors(
+                    colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         titleContentColor = MaterialTheme.colorScheme.onPrimary
                     )

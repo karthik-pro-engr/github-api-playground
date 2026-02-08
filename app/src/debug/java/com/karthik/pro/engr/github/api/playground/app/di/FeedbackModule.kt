@@ -1,7 +1,6 @@
-package com.karthik.pro.engr.github.api.playground.di
+package com.karthik.pro.engr.github.api.playground.app.di
 
 import com.karthik.pro.engr.github.api.playground.app.feedback.AppFeedbackController
-import com.karthik.pro.engr.github.api.playground.app.feedback.DefaultFeedback
 import com.karthik.pro.engr.github.api.playground.app.feedback.FeedbackActions
 import com.karthik.pro.engr.github.api.playground.app.feedback.NoOpAppFeedbackActions
 import com.karthik.pro.engr.github.api.playground.app.feedback.NoOpAppFeedbackController
@@ -17,11 +16,9 @@ abstract class FeedbackModule {
 
     @Binds
     @Singleton
-    @DefaultFeedback
     abstract fun bindFeedbackActions(impl: NoOpAppFeedbackActions): FeedbackActions
 
     @Binds
     @Singleton
-    @DefaultFeedback
     abstract fun bindFeedbackController(impl: NoOpAppFeedbackController): AppFeedbackController
 }
