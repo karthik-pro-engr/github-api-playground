@@ -27,18 +27,18 @@ import com.karthik.pro.engr.feedback.api.ui.screens.FeedbackStateText
 import com.karthik.pro.engr.feedback.api.ui.viewmodel.FeedbackEvent
 import com.karthik.pro.engr.feedback.api.ui.viewmodel.FeedbackUiEffect
 import com.karthik.pro.engr.github.api.playground.app.feedback.AppFeedbackController
-import com.karthik.pro.engr.github.api.playground.app.feedback.FeedbackBinder.provideAppFeedbackController
 import com.karthik.pro.engr.github.api.playground.presentation.common.theme.GithubapiplaygroundTheme
 import com.karthik.pro.engr.github.api.playground.presentation.repos.RepoListRoute
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private lateinit var feedbackController: AppFeedbackController
+    @Inject
+    lateinit var feedbackController: AppFeedbackController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        feedbackController = provideAppFeedbackController(this)
         enableEdgeToEdge()
         setContent {
             GithubapiplaygroundTheme {
