@@ -18,17 +18,35 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Write google-services.json (if secret present)
-        if: ${{ github.event_name != 'pull_request' || github.repository == github.event.pull_request.head.repo.full_name }}
+      - name: Write google-services.json (decode base64 secret & validate)
+        id: write_google_services
         run: |
-          if [ -z "$GOOGLE_SERVICES_JSON" ]; then
-            echo "GOOGLE_SERVICES_JSON secret is empty — skipping write. Build may fail if file is required."
-            exit 0
+          set -euo pipefail
+
+          OUT="$GITHUB_WORKSPACE/app/google-services.json"
+          mkdir -p "$(dirname "$OUT")"
+
+          if [ -z "${GOOGLE_SERVICES_JSON:-}" ]; then
+            echo "ERROR: GOOGLE_SERVICES_JSON secret is empty. Provide base64-encoded google-services.json in the secret." >&2
+            exit 1
           fi
-          mkdir -p "$GITHUB_WORKSPACE/app"
-          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > "$GITHUB_WORKSPACE/app/google-services.json"
-          chmod 600 "$GITHUB_WORKSPACE/app/google-services.json"
-          echo "Wrote app/google-services.json (size: $(wc -c < $GITHUB_WORKSPACE/app/google-services.json) bytes)"
+
+          # Safely decode Base64 (handles wrapped or single-line base64)
+          printf '%s' "$GOOGLE_SERVICES_JSON" | base64 --decode > "$OUT" || { echo "Failed to decode GOOGLE_SERVICES_JSON (not valid base64)"; exit 1; }
+
+          # Remove stray CRs and normalize
+          tr -d '\r' < "$OUT" > "${OUT}.tmp" && mv "${OUT}.tmp" "$OUT"
+
+          chmod 600 "$OUT"
+
+          # Quick JSON validation: use jq if available, otherwise python
+          if command -v jq >/dev/null 2>&1; then
+            jq . "$OUT" >/dev/null
+          else
+            python3 -m json.tool "$OUT" >/dev/null
+          fi
+
+          echo "Wrote and validated $OUT (size: $(wc -c < "$OUT") bytes)"
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
 
@@ -85,11 +103,6 @@ jobs:
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
 
-      - name: Write google-services.json
-        run: |
-          echo "$GOOGLE_SERVICES_JSON" > $GITHUB_WORKSPACE/app/google-services.json
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
 
       - name: Build Beta APK
         run: ./gradlew assembleBeta -PversionName=$VERSION_NAME
