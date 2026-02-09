@@ -1,0 +1,19 @@
+package com.karthik.pro.engr.github.api.playground.di
+
+import com.karthik.pro.engr.github.api.data.repository.GithubRepositoryImpl
+import com.karthik.pro.engr.github.api.domain.repository.GithubRepository
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class RepositoryModule {
+
+    @Binds
+    @Singleton
+    abstract fun bindsGithubRepository(githubRepositoryImpl: GithubRepositoryImpl): GithubRepository
+
+}

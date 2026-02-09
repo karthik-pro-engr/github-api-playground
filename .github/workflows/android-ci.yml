@@ -31,7 +31,7 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
-      # Write google-services.json if the secret is present (keeps PRs working when allowed)
+      # Write google-services.json if the secret (base64) is present (keeps PRs working when allowed)
       - name: Write google-services.json (if secret present)
         if: ${{ github.event_name != 'pull_request' || github.repository == github.event.pull_request.head.repo.full_name }}
         run: |
@@ -39,10 +39,17 @@ jobs:
             echo "GOOGLE_SERVICES_JSON secret is empty — skipping write. Build may fail if file is required."
             exit 0
           fi
+
           mkdir -p "$GITHUB_WORKSPACE/app"
-          printf '%s' "$GOOGLE_SERVICES_JSON" > "$GITHUB_WORKSPACE/app/google-services.json"
+
+          # Decode base64 secret and write the json file
+          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > "$GITHUB_WORKSPACE/app/google-services.json" || {
+            echo "Failed to decode GOOGLE_SERVICES_JSON — verify it's base64-encoded JSON"
+            exit 1
+          }
+
           chmod 600 "$GITHUB_WORKSPACE/app/google-services.json"
-          echo "Wrote app/google-services.json (size: $(wc -c < $GITHUB_WORKSPACE/app/google-services.json) bytes)"
+          echo "Wrote app/google-services.json (size: $(wc -c < "$GITHUB_WORKSPACE/app/google-services.json") bytes)"
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
 

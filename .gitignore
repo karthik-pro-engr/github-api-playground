@@ -50,6 +50,9 @@ google-services.json
 
 # Firebase and secrets
 firebase-service-account.json
+firebase_service_base64.txt
+
+release_files/
 
 # Node dependencies
 node_modules/

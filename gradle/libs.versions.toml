@@ -1,16 +1,51 @@
 [versions]
 agp = "8.13.2"
-kotlin = "2.0.21"
+javaxInject = "1"
+kotlin = "2.3.0"
 coreKtx = "1.17.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
+kotlinxCoroutinesCore = "1.7.0"
 lifecycleRuntimeKtx = "2.10.0"
-activityCompose = "1.12.2"
-composeBom = "2024.09.00"
+activityCompose = "1.12.3"
+composeBom = "2026.01.01"
+firebaseBom = "33.2.0"
+firebase = "5.1.1"
+# Kotlin / Coroutines
+coroutines = "1.10.2"
+ksp = "2.3.0"
+kapt = "2.3.0"
+
+# Networking
+retrofit = "3.0.0"
+okhttp = "5.3.2"
+
+# DI
+hilt = "2.58"
+
+# Room
+room = "2.8.4"
+
+# Compose / AndroidX
+compose-ui = "1.10.2"
+hilt-navigation-compose = "1.3.0"
+
+#Karthik's Dependencies
+allVariantsPreview = "0.3.0-rc1"
+firebaseFeedbackApi = "1.0.0-beta"
+firebaseFeedbackImpl = "1.0.0-beta"
+
+# Testing
+truth = "1.4.5"
+jetbrainsKotlinJvm = "2.3.0"
+material = "1.13.0"
+mockk = "1.14.9"
+turbine = "1.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+javax-inject = { module = "javax.inject:javax.inject", version.ref = "javaxInject" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -24,9 +59,61 @@ androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "u
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+
+#Karthik's Dependencies
+all-variants-preview = { group = "io.github.karthik-pro-engr", name = "preview", version.ref = "allVariantsPreview" }
+firebase-feedback-api = { module = "io.github.karthik-pro-engr:firebase-feedback-api", version.ref = "firebaseFeedbackApi" }
+karthik-pro-engr-firebase-feedback-impl = { module = "io.github.karthik-pro-engr:firebase-feedback-impl", version.ref = "firebaseFeedbackImpl" }
+
+# --- Coroutines ---
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+
+# --- Retrofit ---
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+retrofit-core = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+
+# --- OkHttp ---
+okhttp-core = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+okhttp-logging = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp" }
+okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.ref = "okhttp" }
+
+# --- Hilt ---
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+
+# --- Room ---
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+
+# --- Compose ---
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose-ui" }
+compose-material = { module = "androidx.compose.material:material", version.ref = "compose-ui" }
+
+# --- Compose + Hilt ---
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+
+
+# --- Testing ---
+truth = { module = "com.google.truth:truth", version.ref = "truth" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kapt" }
+firebase-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebase" }
 
