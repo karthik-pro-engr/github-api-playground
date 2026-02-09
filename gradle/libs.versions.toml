@@ -1,5 +1,7 @@
 [versions]
 agp = "8.13.2"
+datastorePreferencesVersion = "1.2.0"
+tinkVersion = "1.17.0"
 javaxInject = "1"
 kotlin = "2.3.0"
 coreKtx = "1.17.0"
@@ -45,6 +47,8 @@ turbine = "1.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferencesVersion" }
+tink = { module = "com.google.crypto.tink:tink-android", version.ref = "tinkVersion" }
 javax-inject = { module = "javax.inject:javax.inject", version.ref = "javaxInject" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

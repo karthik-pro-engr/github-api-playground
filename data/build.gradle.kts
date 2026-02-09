@@ -53,6 +53,10 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":core"))
 
+
+    implementation(libs.datastore.preferences)
+    implementation(libs.tink)
+
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
 
