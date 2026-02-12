@@ -7,29 +7,28 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
-import kotlin.concurrent.atomics.AtomicReference
-import kotlin.concurrent.atomics.ExperimentalAtomicApi
 
-@OptIn(ExperimentalAtomicApi::class)
+
 class TokenProvider @Inject constructor(private val tokenStorage: SecureTokenStorage) {
 
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
-    @OptIn(ExperimentalAtomicApi::class)
+
     private val _cachedToken = AtomicReference<String?>(null)
 
     init {
 
         tokenStorage.observe().onEach { value ->
-            _cachedToken.store(value)
+            _cachedToken.set(value)
         }.launchIn(scope)
 
         scope.launch {
             try {
                 val initial = tokenStorage.read()
                 if (initial != null) {
-                    _cachedToken.store(initial)
+                    _cachedToken.set(initial)
                 }
             } catch (_: Throwable) {
                 // ignore - will be populated by flow eventually
@@ -38,5 +37,5 @@ class TokenProvider @Inject constructor(private val tokenStorage: SecureTokenSto
         }
     }
 
-    fun getTokenSync(): String? = _cachedToken.load()
+    fun getTokenSync(): String? = _cachedToken.get()
 }
