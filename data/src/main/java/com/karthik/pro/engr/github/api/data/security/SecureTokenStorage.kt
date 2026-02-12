@@ -11,6 +11,7 @@ import com.karthik.pro.engr.github.api.data.security.config.PreferenceKeys.ENCRY
 import com.karthik.pro.engr.github.api.domain.security.TokenStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -37,7 +38,11 @@ class SecureTokenStorage @Inject constructor(
     }
 
     override suspend fun read(): String? = withContext(Dispatchers.IO) {
-        val preferences = secureDataStore.data.firstOrNull() ?: return@withContext null
+        val preferences = try {
+            secureDataStore.data.first()
+        } catch (t: Throwable) {
+            return@withContext null
+        }
         val encoded =
             preferences[tokenKey] ?: return@withContext null
         return@withContext try {
@@ -58,9 +63,9 @@ class SecureTokenStorage @Inject constructor(
 
     }
 
-    override  fun observe(): Flow<String?> {
+    override fun observe(): Flow<String?> {
         return secureDataStore.data.map { prefs ->
-            val encoded = prefs[tokenKey]
+            val encoded = prefs[tokenKey]?: return@map null
             try {
                 val decoded = decode(encoded, Base64.NO_WRAP)
                 val decrypt = aead.decrypt(decoded, null)
