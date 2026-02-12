@@ -1,10 +1,12 @@
-package com.karthik.pro.engr.github.api.playground.di
+package com.karthik.pro.engr.github.api.data.di.remote
 
 import com.karthik.pro.engr.github.api.data.remote.GithubService
+import com.karthik.pro.engr.github.api.data.remote.interceptor.AuthInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -25,6 +27,9 @@ object NetworkModule {
         return httpLoggingInterceptor
     }
 
+    @Provides
+    @Singleton
+    fun provideAuth(authInterceptor: AuthInterceptor): Interceptor = authInterceptor
 
     @Provides
     @Singleton
