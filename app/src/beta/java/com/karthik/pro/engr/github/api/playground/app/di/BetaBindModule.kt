@@ -3,7 +3,6 @@ package com.karthik.pro.engr.github.api.playground.app.di
 import com.karthik.pro.engr.github.api.playground.app.feedback.AppFeedbackController
 import com.karthik.pro.engr.github.api.playground.app.feedback.BetaAppFeedbackActions
 import com.karthik.pro.engr.github.api.playground.app.feedback.BetaAppFeedbackController
-import com.karthik.pro.engr.github.api.playground.app.feedback.BetaFeedback
 import com.karthik.pro.engr.github.api.playground.app.feedback.FeedbackActions
 import dagger.Binds
 import dagger.Module
