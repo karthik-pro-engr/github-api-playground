@@ -1,5 +1,6 @@
 package com.karthik.pro.engr.github.api.data.di.remote
 
+import com.karthik.pro.engr.github.api.core.di.IsDebug
 import com.karthik.pro.engr.github.api.data.remote.GithubService
 import com.karthik.pro.engr.github.api.data.remote.interceptor.AuthInterceptor
 import dagger.Module
@@ -21,10 +22,14 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideLogging(): HttpLoggingInterceptor {
+    fun provideLogging(@IsDebug isDebug: Boolean): HttpLoggingInterceptor {
         val httpLoggingInterceptor = HttpLoggingInterceptor()
-        httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
-        httpLoggingInterceptor.redactHeader("Authorization")
+        httpLoggingInterceptor.level = if (isDebug) {
+            httpLoggingInterceptor.redactHeader("Authorization")
+            HttpLoggingInterceptor.Level.BODY
+        } else {
+            HttpLoggingInterceptor.Level.NONE
+        }
         return httpLoggingInterceptor
     }
 
