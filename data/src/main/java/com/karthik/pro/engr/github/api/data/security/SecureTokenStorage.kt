@@ -21,7 +21,6 @@ class SecureTokenStorage @Inject constructor(
     TokenStorage {
 
     private val charset: Charset = Charsets.UTF_8
-    private val tokenKey = stringPreferencesKey(ENCRYPTED_GITHUB_TOKEN)
     override suspend fun save(token: String) {
         withContext(Dispatchers.IO) {
             val encrypt = aead.encrypt(token.toByteArray(), null)
