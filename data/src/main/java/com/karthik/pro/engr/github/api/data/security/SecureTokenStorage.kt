@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 
 class SecureTokenStorage @Inject constructor(
-    private val dataStoreKeyValueStore: DataStoreKeyValueStore,
+    private val dataStoreKeyValueStore: KeyValueStore,
     private val aead: Aead
 ) :
     TokenStorage {
