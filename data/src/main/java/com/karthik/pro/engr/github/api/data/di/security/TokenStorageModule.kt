@@ -1,5 +1,7 @@
 package com.karthik.pro.engr.github.api.data.di.security
 
+import com.karthik.pro.engr.github.api.data.security.DataStoreKeyValueStore
+import com.karthik.pro.engr.github.api.data.security.KeyValueStore
 import com.karthik.pro.engr.github.api.data.security.SecureTokenStorage
 import com.karthik.pro.engr.github.api.domain.security.TokenStorage
 import dagger.Binds
@@ -11,6 +13,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class TokenStorageModule {
+
+    @Binds
+    @Singleton
+    abstract fun bindKeyValueStore(impl: DataStoreKeyValueStore): KeyValueStore
 
     @Binds
     @Singleton
