@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 
 class SecureTokenStorage @Inject constructor(
-    private val secureDataStore: DataStore<Preferences>,
+    private val dataStoreKeyValueStore: DataStoreKeyValueStore,
     private val aead: Aead
 ) :
     TokenStorage {
@@ -30,20 +30,17 @@ class SecureTokenStorage @Inject constructor(
         withContext(Dispatchers.IO) {
             val encrypt = aead.encrypt(token.toByteArray(), null)
             val encoded = Base64.encodeToString(encrypt, Base64.NO_WRAP)
-            secureDataStore.edit { preferences ->
-                preferences[tokenKey] = encoded
-            }
+            dataStoreKeyValueStore.putString(ENCRYPTED_GITHUB_TOKEN, encoded)
+
         }
     }
 
     override suspend fun read(): String? = withContext(Dispatchers.IO) {
-        val preferences = try {
-            secureDataStore.data.first()
-        } catch (t: Throwable) {
+
+        val encoded = dataStoreKeyValueStore.getString(ENCRYPTED_GITHUB_TOKEN)
+        if (encoded.isNullOrEmpty()) {
             return@withContext null
         }
-        val encoded =
-            preferences[tokenKey] ?: return@withContext null
         return@withContext try {
             val encrypted = decode(encoded, Base64.NO_WRAP)
             val decrypt = aead.decrypt(encrypted, null)
@@ -55,16 +52,16 @@ class SecureTokenStorage @Inject constructor(
 
     override suspend fun clear() {
         withContext(Dispatchers.IO) {
-            secureDataStore.edit { prefs ->
-                prefs.remove(tokenKey)
-            }
+            dataStoreKeyValueStore.remove(ENCRYPTED_GITHUB_TOKEN)
         }
 
     }
 
     override fun observe(): Flow<String?> {
-        return secureDataStore.data.map { prefs ->
-            val encoded = prefs[tokenKey]?: return@map null
+        return dataStoreKeyValueStore.observeString(ENCRYPTED_GITHUB_TOKEN).map { encoded ->
+            if (encoded.isNullOrEmpty()) {
+                return@map null
+            }
             try {
                 val decoded = decode(encoded, Base64.NO_WRAP)
                 val decrypt = aead.decrypt(decoded, null)
