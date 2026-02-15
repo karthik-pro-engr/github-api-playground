@@ -2,9 +2,12 @@ package com.karthik.pro.engr.github.api.data.security
 
 
 import com.google.crypto.tink.Aead
+import com.karthik.pro.engr.github.api.core.di.IoDispatcher
 import com.karthik.pro.engr.github.api.data.security.config.PreferenceKeys.ENCRYPTED_GITHUB_TOKEN
 import com.karthik.pro.engr.github.api.domain.security.TokenStorage
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -15,22 +18,20 @@ import javax.inject.Inject
 
 class SecureTokenStorage @Inject constructor(
     private val dataStoreKeyValueStore: KeyValueStore,
-    private val aead: Aead
-) :
-    TokenStorage {
+    private val aead: Aead,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : TokenStorage {
 
     private val charset: Charset = Charsets.UTF_8
-    override suspend fun save(token: String) {
-        withContext(Dispatchers.IO) {
-            val encrypt = aead.encrypt(token.toByteArray(), null)
-            val encoded = Base64.getEncoder().encodeToString(encrypt)
-            dataStoreKeyValueStore.putString(ENCRYPTED_GITHUB_TOKEN, encoded)
+    override suspend fun save(token: String) = withContext(ioDispatcher) {
+        val encrypt = aead.encrypt(token.toByteArray(), null)
+        val encoded = Base64.getEncoder().encodeToString(encrypt)
+        dataStoreKeyValueStore.putString(ENCRYPTED_GITHUB_TOKEN, encoded)
 
-        }
     }
 
-    override suspend fun read(): String? = withContext(Dispatchers.IO) {
 
+    override suspend fun read(): String? = withContext(ioDispatcher) {
         val encoded = dataStoreKeyValueStore.getString(ENCRYPTED_GITHUB_TOKEN)
         if (encoded.isNullOrEmpty()) {
             return@withContext null
@@ -44,12 +45,10 @@ class SecureTokenStorage @Inject constructor(
         }
     }
 
-    override suspend fun clear() {
-        withContext(Dispatchers.IO) {
+    override suspend fun clear() =
+        withContext(ioDispatcher) {
             dataStoreKeyValueStore.remove(ENCRYPTED_GITHUB_TOKEN)
         }
-
-    }
 
     override fun observe(): Flow<String?> {
         return dataStoreKeyValueStore.observeString(ENCRYPTED_GITHUB_TOKEN).map { encoded ->
