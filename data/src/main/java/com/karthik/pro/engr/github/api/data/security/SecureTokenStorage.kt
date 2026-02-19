@@ -27,7 +27,6 @@ class SecureTokenStorage @Inject constructor(
         val encrypt = aead.encrypt(token.toByteArray(), null)
         val encoded = Base64.getEncoder().encodeToString(encrypt)
         dataStoreKeyValueStore.putString(ENCRYPTED_GITHUB_TOKEN, encoded)
-
     }
 
 
