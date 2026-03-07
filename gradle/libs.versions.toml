@@ -38,6 +38,9 @@ allVariantsPreview = "0.3.0-rc1"
 firebaseFeedbackApi = "1.0.0-beta"
 firebaseFeedbackImpl = "1.0.0-beta"
 
+hiltWork = "1.2.0"
+workManager = "2.9.1"
+
 # Testing
 truth = "1.4.5"
 jetbrainsKotlinJvm = "2.3.0"
@@ -104,6 +107,11 @@ compose-material = { module = "androidx.compose.material:material", version.ref 
 
 # --- Compose + Hilt ---
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+
+# workmanager + Hilt
+work-manager = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workManager" }
+hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
+hilt-work-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltWork" }
 
 
 # --- Testing ---

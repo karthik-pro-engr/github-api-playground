@@ -192,6 +192,9 @@ dependencies {
     implementation(libs.firebase.feedback.api)
     betaImplementation(libs.karthik.pro.engr.firebase.feedback.impl)
 
+    implementation(libs.work.manager)
+    implementation(libs.hilt.work)
+    kapt(libs.hilt.work.compiler)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
