@@ -1,7 +1,7 @@
 package com.karthik.pro.engr.github.api.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.karthik.pro.engr.github.api.data.remote.GithubService
+import com.karthik.pro.engr.github.api.data.remote.GithubApiService
 import com.karthik.pro.engr.github.api.data.util.FakeResponseLoader
 import com.karthik.pro.engr.github.api.domain.model.Repo
 import com.karthik.pro.engr.github.api.domain.result.Result
@@ -20,7 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 @OptIn(ExperimentalCoroutinesApi::class)
 class GithubRepositoryImplTest {
     lateinit var mockWebServer: MockWebServer
-    lateinit var service: GithubService
+    lateinit var service: GithubApiService
     lateinit var repositoryImpl: GithubRepositoryImpl
 
     @Before
@@ -39,7 +39,7 @@ class GithubRepositoryImplTest {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        service = retrofit.create(GithubService::class.java)
+        service = retrofit.create(GithubApiService::class.java)
 
         repositoryImpl = GithubRepositoryImpl(service)
     }

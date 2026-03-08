@@ -3,7 +3,7 @@ package com.karthik.pro.engr.github.api.data.repository
 import com.karthik.pro.engr.github.api.core.di.IoDispatcher
 import com.karthik.pro.engr.github.api.data.mapper.RepoMapper
 import com.karthik.pro.engr.github.api.data.mapper.toDomainError
-import com.karthik.pro.engr.github.api.data.remote.GithubService
+import com.karthik.pro.engr.github.api.data.remote.GithubApiService
 import com.karthik.pro.engr.github.api.data.remote.util.safeApiCall
 import com.karthik.pro.engr.github.api.domain.error.DomainError
 import com.karthik.pro.engr.github.api.domain.model.Repo
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class GithubRepositoryImpl @Inject constructor(
-    private val service: GithubService,
+    private val service: GithubApiService,
     @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) :
     GithubRepository {
