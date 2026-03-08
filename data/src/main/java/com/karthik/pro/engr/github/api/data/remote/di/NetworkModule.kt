@@ -1,4 +1,4 @@
-package com.karthik.pro.engr.github.api.data.di.remote
+package com.karthik.pro.engr.github.api.data.remote.di
 
 import com.karthik.pro.engr.github.api.core.di.IsBeta
 import com.karthik.pro.engr.github.api.core.di.IsDebug
