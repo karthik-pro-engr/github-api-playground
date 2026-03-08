@@ -1,6 +1,6 @@
 package com.karthik.pro.engr.github.api.data.remote.api
 
-import com.karthik.pro.engr.github.api.data.remote.dto.GitHubRepoDto
+import com.karthik.pro.engr.github.api.data.remote.dto.response.GitHubRepoDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
