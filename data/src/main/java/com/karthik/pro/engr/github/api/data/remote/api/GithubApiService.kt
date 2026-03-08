@@ -1,4 +1,4 @@
-package com.karthik.pro.engr.github.api.data.remote
+package com.karthik.pro.engr.github.api.data.remote.api
 
 import com.karthik.pro.engr.github.api.data.remote.dto.GitHubRepoDto
 import retrofit2.http.GET

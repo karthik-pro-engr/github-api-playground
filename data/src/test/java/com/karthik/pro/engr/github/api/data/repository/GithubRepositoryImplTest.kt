@@ -1,7 +1,7 @@
 package com.karthik.pro.engr.github.api.data.repository
 
 import com.google.common.truth.Truth.assertThat
-import com.karthik.pro.engr.github.api.data.remote.GithubApiService
+import com.karthik.pro.engr.github.api.data.remote.api.GithubApiService
 import com.karthik.pro.engr.github.api.data.util.FakeResponseLoader
 import com.karthik.pro.engr.github.api.domain.model.Repo
 import com.karthik.pro.engr.github.api.domain.result.Result

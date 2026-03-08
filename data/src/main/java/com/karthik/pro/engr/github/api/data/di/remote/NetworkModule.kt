@@ -2,7 +2,7 @@ package com.karthik.pro.engr.github.api.data.di.remote
 
 import com.karthik.pro.engr.github.api.core.di.IsBeta
 import com.karthik.pro.engr.github.api.core.di.IsDebug
-import com.karthik.pro.engr.github.api.data.remote.GithubApiService
+import com.karthik.pro.engr.github.api.data.remote.api.GithubApiService
 import com.karthik.pro.engr.github.api.data.remote.interceptor.AuthInterceptor
 import dagger.Module
 import dagger.Provides
