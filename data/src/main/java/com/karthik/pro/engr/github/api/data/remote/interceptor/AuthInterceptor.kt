@@ -1,7 +1,6 @@
 package com.karthik.pro.engr.github.api.data.remote.interceptor
 
-import android.util.Log
-import com.karthik.pro.engr.github.api.data.di.security.TokenProvider
+import com.karthik.pro.engr.github.api.data.security.TokenProvider
 import okhttp3.Interceptor
 import okhttp3.Response
 import javax.inject.Inject

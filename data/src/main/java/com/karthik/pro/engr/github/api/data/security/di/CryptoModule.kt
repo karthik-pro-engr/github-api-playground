@@ -1,4 +1,4 @@
-package com.karthik.pro.engr.github.api.data.di.security
+package com.karthik.pro.engr.github.api.data.security.di
 
 import android.content.Context
 import com.google.crypto.tink.Aead

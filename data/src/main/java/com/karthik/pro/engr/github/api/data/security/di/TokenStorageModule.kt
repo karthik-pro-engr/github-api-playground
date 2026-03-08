@@ -1,4 +1,4 @@
-package com.karthik.pro.engr.github.api.data.di.security
+package com.karthik.pro.engr.github.api.data.security.di
 
 import com.karthik.pro.engr.github.api.data.security.DataStoreKeyValueStore
 import com.karthik.pro.engr.github.api.data.security.KeyValueStore

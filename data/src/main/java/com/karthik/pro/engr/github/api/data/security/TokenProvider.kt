@@ -1,12 +1,12 @@
-package com.karthik.pro.engr.github.api.data.di.security
+package com.karthik.pro.engr.github.api.data.security
 
+import com.karthik.pro.engr.github.api.data.security.di.ApplicationScope
 import com.karthik.pro.engr.github.api.domain.security.TokenStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicReference
 import javax.inject.Inject
-
 
 class TokenProvider @Inject constructor(
     private val tokenStorage: TokenStorage,

@@ -1,7 +1,6 @@
 package com.karthik.pro.engr.github.api.data.security
 
 import com.google.common.truth.Truth.assertThat
-import com.karthik.pro.engr.github.api.data.di.security.TokenProvider
 import com.karthik.pro.engr.github.api.domain.security.TokenStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
