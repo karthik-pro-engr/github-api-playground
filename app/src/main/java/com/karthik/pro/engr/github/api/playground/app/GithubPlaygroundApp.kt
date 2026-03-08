@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.google.firebase.FirebaseApp
+import com.karthik.pro.engr.github.api.core.notification.UploadNotification
 import com.karthik.pro.engr.github.api.playground.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
@@ -14,6 +15,8 @@ class GithubPlaygroundApp : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+
+        UploadNotification.createChannel(this)
 
         if (BuildConfig.ENABLE_APP_DISTRIBUTION) {
             setupBetaFeatures()
@@ -27,16 +30,16 @@ class GithubPlaygroundApp : Application(), Configuration.Provider {
         // Also list installed Firebase apps for debugging
         val apps = FirebaseApp.getApps(this)
         Log.d("BetaApplication", "FirebaseApp.getApps(): ${apps.map { it.name }}")
-     /*   FeedbackBinder.provideAppFeedbackController = { activity: ComponentActivity ->
-            val firebaseFeedbackSender = FirebaseFeedbackSender()
-            val feedbackViewModelFactory = FeedbackViewModelFactory(firebaseFeedbackSender)
-            val vm =
-                ViewModelProvider(
-                    activity,
-                    feedbackViewModelFactory
-                ).get(FeedbackViewModel::class.java)
-            BetaAppFeedbackController(vm, BetaAppFeedbackActions(vm))
-        }*/
+        /*   FeedbackBinder.provideAppFeedbackController = { activity: ComponentActivity ->
+               val firebaseFeedbackSender = FirebaseFeedbackSender()
+               val feedbackViewModelFactory = FeedbackViewModelFactory(firebaseFeedbackSender)
+               val vm =
+                   ViewModelProvider(
+                       activity,
+                       feedbackViewModelFactory
+                   ).get(FeedbackViewModel::class.java)
+               BetaAppFeedbackController(vm, BetaAppFeedbackActions(vm))
+           }*/
     }
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
