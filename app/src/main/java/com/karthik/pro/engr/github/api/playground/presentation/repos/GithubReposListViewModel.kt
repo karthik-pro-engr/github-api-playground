@@ -3,7 +3,7 @@ package com.karthik.pro.engr.github.api.playground.presentation.repos
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.karthik.pro.engr.github.api.data.di.security.TokenProvider
+import com.karthik.pro.engr.github.api.data.security.TokenProvider
 import com.karthik.pro.engr.github.api.data.security.SecureTokenStorage
 import com.karthik.pro.engr.github.api.domain.error.DomainError
 import com.karthik.pro.engr.github.api.domain.model.Repo
