@@ -1,8 +1,8 @@
 package com.karthik.pro.engr.github.api.data.util
 
 import com.google.common.truth.Truth.assertThat
-import com.karthik.pro.engr.github.api.data.remote.dto.GitHubOwnerDto
-import com.karthik.pro.engr.github.api.data.remote.dto.GitHubRepoDto
+import com.karthik.pro.engr.github.api.data.remote.dto.response.GitHubOwnerDto
+import com.karthik.pro.engr.github.api.data.remote.dto.response.GitHubRepoDto
 import com.karthik.pro.engr.github.api.data.remote.error.NetworkError
 import com.karthik.pro.engr.github.api.data.remote.util.safeApiCall
 import com.karthik.pro.engr.github.api.domain.result.Result
