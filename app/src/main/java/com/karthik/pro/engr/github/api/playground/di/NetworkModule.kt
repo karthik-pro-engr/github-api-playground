@@ -1,6 +1,6 @@
 package com.karthik.pro.engr.github.api.playground.di
 
-import com.karthik.pro.engr.github.api.data.remote.GithubService
+import com.karthik.pro.engr.github.api.data.remote.api.GithubService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
