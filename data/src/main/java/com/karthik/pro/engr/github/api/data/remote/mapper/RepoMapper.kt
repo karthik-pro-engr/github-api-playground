@@ -1,4 +1,4 @@
-package com.karthik.pro.engr.github.api.data.mapper
+package com.karthik.pro.engr.github.api.data.remote.mapper
 
 import com.karthik.pro.engr.github.api.data.remote.dto.GitHubRepoDto
 import com.karthik.pro.engr.github.api.domain.model.Owner
