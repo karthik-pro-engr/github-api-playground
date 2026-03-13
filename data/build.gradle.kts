@@ -53,6 +53,8 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":core"))
 
+    implementation(libs.paging)
+
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
 
