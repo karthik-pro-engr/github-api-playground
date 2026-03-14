@@ -1,12 +1,15 @@
-package com.karthik.pro.engr.github.api.playground.di
+package com.karthik.pro.engr.github.api.data.remote.di
 
 import com.karthik.pro.engr.github.api.data.remote.api.GithubService
+import com.karthik.pro.engr.github.api.data.remote.dto.error.ErrorDto
+import com.karthik.pro.engr.github.api.data.remote.error.ErrorParser
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -49,5 +52,9 @@ object NetworkModule {
     @Singleton
     fun provideGithubService(retrofit: Retrofit): GithubService =
         retrofit.create(GithubService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideErrorDto(retrofit: Retrofit): ErrorParser = ErrorParser(retrofit)
 
 }
