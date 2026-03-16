@@ -45,6 +45,7 @@ jetbrainsKotlinJvm = "2.3.0"
 material = "1.13.0"
 mockk = "1.14.9"
 turbine = "1.2.1"
+pagingCommon = "3.4.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -106,6 +107,7 @@ hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", ve
 
 # --- Paging3 ----
 paging = { module = "androidx.paging:paging-compose", version.ref = "paging" }
+androidx-paging-common = {module = "androidx.paging:paging-common", version.ref = "pagingCommon" }
 
 
 # --- Testing ---
