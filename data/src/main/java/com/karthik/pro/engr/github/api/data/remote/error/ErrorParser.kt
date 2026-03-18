@@ -13,7 +13,10 @@ class ErrorParser @Inject constructor(private val retrofit: Retrofit) {
         val errorBody = response.errorBody()
         if (errorBody != null) {
             try {
-                converter.convert(errorBody)
+                val dto = converter.convert(errorBody)
+                if (dto != null) {
+                    return dto
+                }
             } catch (t: Throwable) {
                 try {
                     val raw = errorBody.string()
