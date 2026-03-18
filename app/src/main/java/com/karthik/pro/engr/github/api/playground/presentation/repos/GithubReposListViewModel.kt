@@ -1,45 +1,66 @@
 package com.karthik.pro.engr.github.api.playground.presentation.repos
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.karthik.pro.engr.github.api.domain.error.DomainError
 import com.karthik.pro.engr.github.api.domain.model.Repo
-import com.karthik.pro.engr.github.api.domain.result.Result
 import com.karthik.pro.engr.github.api.domain.usecase.GetUserReposUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GithubReposListViewModel @Inject constructor(private val useCase: GetUserReposUseCase) :
-    ViewModel() {
+class GithubReposListViewModel @Inject constructor(
+    private val useCase: GetUserReposUseCase,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
-    private var _uiState = MutableStateFlow<UiState<List<Repo>>>(UiState.Idle)
-    val uiState: StateFlow<UiState<List<Repo>>> = _uiState
 
-    fun loadRepos(username: String) {
+    private var _committedQuery = MutableStateFlow<String?>(savedStateHandle[KEY_USER_NAME_QUERY])
+    val currentQuery: StateFlow<String?> = _committedQuery.asStateFlow()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val reposSharedFlow: Flow<PagingData<Repo>> = _committedQuery
+        .filterNotNull()
+        .distinctUntilChanged()
+        .flatMapLatest { userName ->
+            useCase(userName)
+                .cachedIn(viewModelScope)
+        }
+        .shareIn(viewModelScope,
+            SharingStarted.Lazily,
+            PAGING_REPLAY)
+
+    init {
         viewModelScope.launch {
-            _uiState.value = UiState.Loading
-            useCase(username).collect { result ->
-                _uiState.value = when (result) {
-                    is Result.Failure -> UiState.Error(mapError(result.error))
-                    is Result.Success -> UiState.Success(result.data)
-                }
+            _committedQuery.collect { query ->
+                savedStateHandle[KEY_USER_NAME_QUERY] = query
             }
         }
-
     }
 
-    private fun mapError(error: DomainError): String {
-        return when (error) {
-            DomainError.Network -> "No internet connection"
-            DomainError.Unauthorized -> "Unauthorized access"
-            DomainError.NotFound -> "User not found"
-            DomainError.RateLimited -> "Rate limit exceeded"
-            DomainError.Unknown -> "Something went wrong"
-        }
+
+    fun submitQuery(username: String) {
+        val trimmed = username.trim()
+        _committedQuery.value = trimmed.ifEmpty { null }
     }
 
+
+    companion object {
+        private const val KEY_USER_NAME_QUERY = "last_user_name"
+        private const val PAGING_REPLAY = 1
+    }
 }
