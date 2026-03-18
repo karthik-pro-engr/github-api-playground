@@ -191,6 +191,8 @@ dependencies {
     implementation(libs.firebase.feedback.api)
     betaImplementation(libs.karthik.pro.engr.firebase.feedback.impl)
 
+    implementation(libs.paging)
+
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
