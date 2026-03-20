@@ -22,9 +22,8 @@ class GithubPagingSource @Inject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Repo> {
         val page = params.key ?: STARTING_PAGE_INDEX
-        val response = service.listUserRepos(username, perPage, page)
         return try {
-
+            val response = service.listUserRepos(username, perPage, page)
             if (response.isSuccessful) {
                 val result = response.body().orEmpty()
                 val repos = RepoMapper.fromDtoList(result)
