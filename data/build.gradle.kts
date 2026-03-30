@@ -70,6 +70,8 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.turbine)
     testImplementation(libs.androidx.paging.testing)
+    testImplementation(project(":core-testing"))
+
 
 
 }
