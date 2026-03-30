@@ -7,25 +7,20 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import com.karthik.pro.engr.github.api.core.testing.coroutine.MainDispatcherRule
 import com.karthik.pro.engr.github.api.data.remote.api.GithubService
 import com.karthik.pro.engr.github.api.data.remote.error.ErrorParser
 import com.karthik.pro.engr.github.api.domain.model.Repo
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
-import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestWatcher
-import org.junit.runner.Description
 import retrofit2.Response
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -86,17 +81,5 @@ class GithubRepositoryImplTest {
         override fun onChanged(position: Int, count: Int, payload: Any?) {}
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    class MainDispatcherRule(
-        private val dispatcher: TestDispatcher = StandardTestDispatcher()
-    ) : TestWatcher() {
 
-        override fun starting(description: Description) {
-            Dispatchers.setMain(dispatcher)
-        }
-
-        override fun finished(description: Description) {
-            Dispatchers.resetMain()
-        }
-    }
 }
