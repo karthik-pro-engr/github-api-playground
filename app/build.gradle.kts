@@ -174,6 +174,7 @@ dependencies {
     implementation(libs.okhttp.logging)
 
     implementation(libs.hilt.android)
+    implementation(libs.androidx.paging.runtime.ktx)
     kapt(libs.hilt.compiler)
 
     implementation(libs.room.runtime)
