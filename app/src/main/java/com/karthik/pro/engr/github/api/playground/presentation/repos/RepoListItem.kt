@@ -12,17 +12,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.karthik.pro.engr.devtools.AllVariantsPreview
 import com.karthik.pro.engr.github.api.domain.model.Owner
 import com.karthik.pro.engr.github.api.domain.model.Repo
+import com.karthik.pro.engr.github.api.playground.presentation.repos.GithubRepoListTestTags.REPO_ITEM
 
 @Composable
 fun RepoListItem(modifier: Modifier = Modifier, repo: Repo) {
 
     Column(
         Modifier
+            .testTag(REPO_ITEM)
             .fillMaxWidth()
             .padding(top = 8.dp, start = 8.dp, end = 8.dp)
     ) {

@@ -32,6 +32,7 @@ import com.karthik.pro.engr.github.api.domain.model.Owner
 import com.karthik.pro.engr.github.api.domain.model.Repo
 import com.karthik.pro.engr.github.api.playground.R
 import com.karthik.pro.engr.github.api.playground.presentation.handlers.PagingScreenHandler
+import com.karthik.pro.engr.github.api.playground.presentation.repos.GithubRepoListTestTags.REPO_ITEM
 import com.karthik.pro.engr.github.api.playground.presentation.repos.GithubRepoListTestTags.SEARCH_BUTTON
 import com.karthik.pro.engr.github.api.playground.presentation.repos.GithubRepoListTestTags.SEARCH_INPUT
 import kotlinx.coroutines.flow.Flow
@@ -80,7 +81,9 @@ fun RepoListScreen(
                     Text(stringResource(R.string.no_repos_found))
                 }
             }) { repo ->
-                RepoListItem(repo = repo)
+                RepoListItem(
+                    repo = repo
+                )
             }
 
         }
