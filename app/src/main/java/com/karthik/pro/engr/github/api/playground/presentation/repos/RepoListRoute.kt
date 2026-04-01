@@ -11,10 +11,11 @@ fun RepoListRoute(
     modifier: Modifier = Modifier,
     viewModel: GithubReposListViewModel = hiltViewModel()
 ) {
-    val state by viewModel.uiState.collectAsState()
+    val currentQuery by viewModel.currentQuery.collectAsState()
     RepoListScreen(
         modifier = modifier,
-        state = state,
-        onFetch = viewModel::loadRepos
+        currentQuery = currentQuery,
+        reposSharedFlow = viewModel.reposSharedFlow,
+        onSubmit = viewModel::submitQuery
     )
 }

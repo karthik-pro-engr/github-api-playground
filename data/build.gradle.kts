@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    kotlin("kapt")
 }
 
 android {
@@ -53,6 +54,12 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":core"))
 
+    implementation(libs.paging)
+
+    implementation(libs.hilt.android)
+    implementation(libs.androidx.paging.runtime.ktx)
+    kapt(libs.hilt.compiler)
+
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
 
@@ -60,6 +67,11 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     testImplementation(libs.okhttp.mockwebserver)
     testImplementation(libs.truth)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
+    testImplementation(libs.androidx.paging.testing)
+    testImplementation(project(":core-testing"))
+
 
 
 }

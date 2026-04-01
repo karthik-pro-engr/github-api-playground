@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">github-api-playground</string>
+    <string name="github_username">GitHub username</string>
+    <string name="fetch">Fetch</string>
+
+    <!-- placeholders / empty states -->
+    <string name="repos_placeholder_provided_username">Provided username repos will be shown here</string>
+    <string name="repos_label_username">Enter Username</string>
+    <string name="repos_empty_no_public">User does not have any public repos</string>
+
+    <!-- buttons / actions -->
+    <string name="action_fetch">Fetch</string>
+    <string name="action_retry">Retry</string>
+
+    <!-- input hint -->
+    <string name="repos_info">after providing username, the corresponding user\'s Repos will be shown here</string>
+
+    <!-- loading / errors -->
+    <string name="loading_initial">Loading…</string>
+    <string name="repos_loading">Loading item</string>
+    <string name="error_generic">Something went wrong</string>
+    <string name="error_no_internet">No internet connection</string>
+    <string name="error_user_not_found">User not found</string>
+
+    <!-- accessibility / titles -->
+    <string name="title_repo_list">Repositories</string>
+    <string name="retry">Retry</string>
+    <string name="no_repos_found">No repos found</string>
 </resources>

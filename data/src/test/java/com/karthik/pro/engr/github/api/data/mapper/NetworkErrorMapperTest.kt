@@ -2,6 +2,7 @@ package com.karthik.pro.engr.github.api.data.mapper
 
 import com.google.common.truth.Truth.assertThat
 import com.karthik.pro.engr.github.api.data.remote.error.NetworkError
+import com.karthik.pro.engr.github.api.data.remote.mapper.toDomainError
 import com.karthik.pro.engr.github.api.domain.error.DomainError
 import org.junit.Test
 

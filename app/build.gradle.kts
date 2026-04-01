@@ -174,6 +174,7 @@ dependencies {
     implementation(libs.okhttp.logging)
 
     implementation(libs.hilt.android)
+    implementation(libs.androidx.paging.runtime.ktx)
     kapt(libs.hilt.compiler)
 
     implementation(libs.room.runtime)
@@ -191,11 +192,14 @@ dependencies {
     implementation(libs.firebase.feedback.api)
     betaImplementation(libs.karthik.pro.engr.firebase.feedback.impl)
 
+    implementation(libs.paging)
+
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.turbine)
     testImplementation(libs.truth)
+    androidTestImplementation(libs.truth)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -203,6 +207,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(project(":core-testing"))
 
 }
 kapt {
