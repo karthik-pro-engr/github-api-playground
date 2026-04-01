@@ -9,10 +9,12 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.karthik.pro.engr.github.api.playground.presentation.error.PagingErrorMapper
+import com.karthik.pro.engr.github.api.playground.presentation.repos.GithubRepoListTestTags.APPEND_LOADER
 
 @Composable
 fun PagingFooter(modifier: Modifier = Modifier, lazyPagingItems: LazyPagingItems<*>) {
@@ -25,13 +27,15 @@ fun PagingFooter(modifier: Modifier = Modifier, lazyPagingItems: LazyPagingItems
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                PagingError(error = error,
+                PagingError(
+                    error = error,
                     onClick = { lazyPagingItems.retry() })
             }
         }
 
         LoadState.Loading -> Row(
             modifier = Modifier
+                .testTag(APPEND_LOADER)
                 .fillMaxWidth()
                 .padding(16.dp),
             horizontalArrangement = Arrangement.Center
