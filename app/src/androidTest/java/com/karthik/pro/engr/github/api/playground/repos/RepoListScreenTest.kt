@@ -30,6 +30,7 @@ import com.karthik.pro.engr.github.api.playground.presentation.repos.GithubRepoL
 import com.karthik.pro.engr.github.api.playground.presentation.repos.GithubRepoListTestTags.SEARCH_INPUT
 import com.karthik.pro.engr.github.api.playground.presentation.repos.RepoListItem
 import com.karthik.pro.engr.github.api.playground.presentation.repos.ReposSearchByUserName
+import com.karthik.pro.engr.github.api.playground.repos.robot.repoListRobot
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -53,7 +54,8 @@ class RepoListScreenTest {
             PagingScreenHandler(
                 lazyPagingItems = lazyPagingItems,
                 emptyContent = {},
-                itemContent = { value -> RepoListItem(repo = value) })
+                itemContent = { RepoListItem(repo = it) }
+            )
         }
     }
 
@@ -71,174 +73,116 @@ class RepoListScreenTest {
 
 
     @Test
-    fun search_input_and_click_triggers_onSubmit() {
+    fun search_triggers_submit() = with(composeTestRule) {
+
         var submittedText: String? = null
 
-        composeTestRule.setContent {
+        setContent {
             ReposSearchByUserName(
                 currentQuery = null,
-                onSubmit = { value ->
-                    submittedText = value
-                }
-
+                onSubmit = { submittedText = it }
             )
         }
 
-        composeTestRule.onNodeWithTag(SEARCH_INPUT)
-            .performTextInput("JakeWharton")
-
-        composeTestRule.onNodeWithTag(SEARCH_BUTTON)
-            .performClick()
+        repoListRobot(this) {
+            enterUsername("JakeWharton")
+            tapSearch()
+        }
 
         assertThat(submittedText).isEqualTo("JakeWharton")
-
     }
 
     @Test
-    fun show_full_screen_loader_when_refresh_state() {
+    fun show_full_screen_loader_when_refresh_state() = with(composeTestRule) {
 
-        val flow = flow<PagingData<Repo>> {
-            // No emission
+        val flow = flow<PagingData<Repo>> { }
+
+        launchPagingScreen(flow)
+
+        repoListRobot(this) {
+            assertFullScreenLoaderDisplayed()
         }
-
-        composeTestRule.launchPagingScreen(flow)
-
-        composeTestRule.onNodeWithTag(FULL_SCREEN_LOADER)
-            .assertIsDisplayed()
-
     }
 
     @Test
-    fun show_full_screen_error_when_error_state() {
+    fun show_full_screen_error_when_error_state() = with(composeTestRule) {
+
         val flow = createPager { ErrorPagingSource() }
 
-        composeTestRule.launchPagingScreen(flow)
+        launchPagingScreen(flow)
 
-        composeTestRule.onNodeWithTag(FULL_SCREEN_ERROR)
-            .assertIsDisplayed()
-
-    }
-
-    @Test
-    fun pagingScreenHandler_callsOnRetry_whenRetryClicked() {
-        var retryCalled = false
-        val flow = createPager { ErrorPagingSource() }
-
-        composeTestRule.setContent {
-            val lazyPagingItems = flow.collectAsLazyPagingItems()
-            PagingScreenHandler(
-                lazyPagingItems = lazyPagingItems,
-                onRetry = { retryCalled = true },
-                emptyContent = {},
-                itemContent = { value -> RepoListItem(repo = value) })
+        repoListRobot(this) {
+            assertFullScreenErrorDisplayed()
         }
-
-        composeTestRule.onNodeWithTag(RETRY_BUTTON)
-            .performClick()
-
-        assertThat(retryCalled).isTrue()
-
     }
 
     @Test
-    fun shows_append_loader_when_scrolled_to_end() {
+    fun append_loading_shows_loader() = with(composeTestRule) {
+
         val gate = CompletableDeferred<Unit>()
         val flow = createPager { TestPagingSource(gate) }
 
-        composeTestRule.launchPagingScreen(flow)
+        launchPagingScreen(flow)
 
-        composeTestRule.waitUntil()
-
-        composeTestRule
-            .onNodeWithTag(REPO_LIST)
-            .performScrollToIndex(7)
-
-        composeTestRule
-            .onNodeWithTag(APPEND_LOADER)
-            .assertIsDisplayed()
-
+        repoListRobot(this) {
+            assertRepoListDisplayed()
+            scrollToLoadMore()
+            assertAppendLoaderDisplayed()
+        }
     }
 
     @Test
-    fun shows_append_retry_when_append_page_is_error() {
+    fun append_error_shows_retry() = with(composeTestRule) {
+
         val gate = CompletableDeferred<Unit>()
-        val flow = createPager { TestPagingSource(gate, AppendState.ERROR) }
-
-        composeTestRule.launchPagingScreen(flow)
-
-        composeTestRule.waitUntil()
-
-        composeTestRule
-            .onNodeWithTag(REPO_LIST)
-            .performScrollToIndex(7)
-
-        composeTestRule
-            .onNodeWithTag(APPEND_LOADER)
-            .assertIsDisplayed()
-
-        gate.complete(Unit)
-
-        composeTestRule
-            .onNodeWithTag(APPEND_ERROR)
-            .assertIsDisplayed()
-
-    }
-
-    @Test
-    fun append_error_then_retry_shows_success_items() {
-        val gate = CompletableDeferred<Unit>()
-
-        val testPagingSource = TestPagingSource(gate, AppendState.ERROR)
-
         val flow = createPager {
-            testPagingSource
+            TestPagingSource(gate, AppendState.ERROR)
         }
 
-        composeTestRule.launchPagingScreen(flow)
+        launchPagingScreen(flow)
 
-        composeTestRule.waitUntil()
-
-        composeTestRule
-            .onNodeWithTag(REPO_LIST)
-            .performScrollToIndex(7)
-
-        composeTestRule
-            .onNodeWithTag(APPEND_LOADER)
-            .assertIsDisplayed()
+        repoListRobot(this) {
+            assertRepoListDisplayed()
+            scrollToLoadMore()
+            assertAppendLoaderDisplayed()
+        }
 
         gate.complete(Unit)
 
-        composeTestRule
-            .onNodeWithTag(APPEND_ERROR)
-            .assertIsDisplayed()
-
-        testPagingSource.switchToSuccess()
-
-
-        composeTestRule
-            .onNodeWithTag(RETRY_BUTTON)
-            .performClick()
-
-        composeTestRule.waitUntil {
-            composeTestRule
-                .onAllNodesWithTag(REPO_ITEM)
-                .fetchSemanticsNodes().size > 10
-        }
-
-        composeTestRule
-            .onAllNodesWithTag(APPEND_ERROR)
-            .assertCountEquals(0)
-
-    }
-
-    private fun ComposeContentTestRule.waitUntil() {
-        waitUntil {
-            onAllNodesWithTag(
-                REPO_ITEM
-            ).fetchSemanticsNodes().isNotEmpty()
+        repoListRobot(this) {
+            assertAppendErrorDisplayed()
         }
     }
 
+    @Test
+    fun append_error_retry_loads_success_items() = with(composeTestRule) {
+
+        val gate = CompletableDeferred<Unit>()
+        val pagingSource = TestPagingSource(gate, AppendState.ERROR)
+
+        val flow = createPager { pagingSource }
+
+        launchPagingScreen(flow)
+
+        repoListRobot(this) {
+            assertRepoListDisplayed()
+            scrollToLoadMore()
+            assertAppendLoaderDisplayed()
+        }
+
+        gate.complete(Unit)
+
+        repoListRobot(this) {
+            assertAppendErrorDisplayed()
+        }
+
+        pagingSource.switchToSuccess()
+
+        repoListRobot(this) {
+            tapRetry()
+            assertMoreItemsLoaded()
+        }
+    }
 
     class TestPagingSource(
         private val gate: CompletableDeferred<Unit>,
