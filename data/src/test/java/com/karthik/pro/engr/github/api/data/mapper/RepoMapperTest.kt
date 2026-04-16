@@ -18,6 +18,7 @@ class RepoMapperTest {
             stargazers_count = 42,
             language = "Kotlin",
             forks_count = 0,
+            languages_url = "https://api.github.com/repos/karthik-pro-engr/compose-playground/languages",
             owner = GitHubOwnerDto(
                 login = "karthik-pro-engr",
                 id = 1,
@@ -29,7 +30,7 @@ class RepoMapperTest {
         val domainRepo = RepoMapper.fromDto(dto)
         assertThat(domainRepo.id).isEqualTo(123)
         assertThat(domainRepo.name).isEqualTo("compose-playground")
-        assertThat(domainRepo.owner.login).isEqualTo("karthik-pro-engr")
+        assertThat(domainRepo.owner.name).isEqualTo("karthik-pro-engr")
         assertThat(domainRepo.stars).isEqualTo(42)
         assertThat(domainRepo.language).isEqualTo("Kotlin")
     }

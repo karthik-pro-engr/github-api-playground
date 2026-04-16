@@ -6,7 +6,6 @@ import com.google.common.truth.Truth.assertThat
 import com.karthik.pro.engr.github.api.domain.model.Owner
 import com.karthik.pro.engr.github.api.domain.model.Repo
 import com.karthik.pro.engr.github.api.domain.repository.GithubRepository
-import com.karthik.pro.engr.github.api.domain.result.Result
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -31,10 +30,11 @@ class GetUserReposUseCaseTest {
                     language = "Shell",
                     stars = 0,
                     forks = 0,
+                    languagesUrl = "https://api.github.com/repos/karthik-pro-engr/admin-tools/languages",
                     owner = Owner(
-                        login = "karthik-pro-engr",
+                        name = "karthik-pro-engr",
                         id = 101930095,
-                        avatarUrl = "https://avatars.githubusercontent.com/u/101930095?v=4",
+                        profilePictureUrl = "https://avatars.githubusercontent.com/u/101930095?v=4",
                         htmlUrl = "https://github.com/karthik-pro-engr"
                     )
                 )

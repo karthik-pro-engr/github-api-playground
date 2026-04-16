@@ -12,12 +12,13 @@ object RepoMapper {
         description = dto.description,
         htmlUrl = dto.html_url,
         language = dto.language,
+        languagesUrl = dto.languages_url,
         stars = dto.stargazers_count,
         forks = dto.forks_count,
         owner = Owner(
-            login = dto.owner.login,
+            name = dto.owner.login,
             id = dto.owner.id,
-            avatarUrl = dto.owner.avatar_url,
+            profilePictureUrl = dto.owner.avatar_url,
             htmlUrl = dto.owner.html_url
         )
     )

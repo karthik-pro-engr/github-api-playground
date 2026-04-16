@@ -15,11 +15,8 @@ import io.mockk.Called
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -149,10 +146,11 @@ class GithubRepoListViewModelTest {
                         language = "Shell",
                         stars = 0,
                         forks = 0,
+                        languagesUrl = "https://api.github.com/repos/karthik-pro-engr/admin-tools/languages",
                         owner = Owner(
-                            login = "karthik-pro-engr",
+                            name = "karthik-pro-engr",
                             id = 101930095,
-                            avatarUrl = "https://avatars.githubusercontent.com/u/101930095?v=4",
+                            profilePictureUrl = "https://avatars.githubusercontent.com/u/101930095?v=4",
                             htmlUrl = "https://github.com/karthik-pro-engr"
                         )
                     ), Repo(
@@ -164,10 +162,11 @@ class GithubRepoListViewModelTest {
                         language = "Shell",
                         stars = 0,
                         forks = 0,
+                        languagesUrl = "https://api.github.com/repos/karthik-pro-engr/admin-tools/languages",
                         owner = Owner(
-                            login = "karthik-pro-engr",
+                            name = "karthik-pro-engr",
                             id = 101930095,
-                            avatarUrl = "https://avatars.githubusercontent.com/u/101930095?v=4",
+                            profilePictureUrl = "https://avatars.githubusercontent.com/u/101930095?v=4",
                             htmlUrl = "https://github.com/karthik-pro-engr"
                         )
                     )

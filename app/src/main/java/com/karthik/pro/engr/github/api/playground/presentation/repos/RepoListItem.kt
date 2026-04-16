@@ -71,10 +71,11 @@ fun RepoListItemPreview() {
             language = "Shell",
             stars = 5,
             forks = 1,
+            languagesUrl = "https://api.github.com/repos/karthik-pro-engr/github-api-playground/languages",
             owner = Owner(
-                login = "karthik-pro-engr",
+                name = "karthik-pro-engr",
                 id = 101930095,
-                avatarUrl = "https://avatars.githubusercontent.com/u/101930095?v=",
+                profilePictureUrl = "https://avatars.githubusercontent.com/u/101930095?v=",
                 htmlUrl = "https://github.com/karthik-pro-engr"
             )
         )

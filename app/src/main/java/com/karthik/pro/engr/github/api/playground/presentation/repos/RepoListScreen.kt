@@ -32,7 +32,6 @@ import com.karthik.pro.engr.github.api.domain.model.Owner
 import com.karthik.pro.engr.github.api.domain.model.Repo
 import com.karthik.pro.engr.github.api.playground.R
 import com.karthik.pro.engr.github.api.playground.presentation.handlers.PagingScreenHandler
-import com.karthik.pro.engr.github.api.playground.presentation.repos.GithubRepoListTestTags.REPO_ITEM
 import com.karthik.pro.engr.github.api.playground.presentation.repos.GithubRepoListTestTags.SEARCH_BUTTON
 import com.karthik.pro.engr.github.api.playground.presentation.repos.GithubRepoListTestTags.SEARCH_INPUT
 import kotlinx.coroutines.flow.Flow
@@ -138,10 +137,11 @@ private fun RepoListScreenPreview() {
                     language = "Shell",
                     stars = 5,
                     forks = 1,
+                    languagesUrl = "https://api.github.com/repos/karthik-pro-engr/github-api-playground/languages",
                     owner = Owner(
-                        login = "karthik-pro-engr",
+                        name = "karthik-pro-engr",
                         id = 101930095,
-                        avatarUrl = "https://avatars.githubusercontent.com/u/101930095?v=",
+                        profilePictureUrl = "https://avatars.githubusercontent.com/u/101930095?v=",
                         htmlUrl = "https://github.com/karthik-pro-engr"
                     )
                 ), Repo(
@@ -153,10 +153,11 @@ private fun RepoListScreenPreview() {
                     language = "Shell",
                     stars = 5,
                     forks = 1,
+                    languagesUrl = "https://api.github.com/repos/karthik-pro-engr/github-api-playground/languages",
                     owner = Owner(
-                        login = "karthik-pro-engr",
+                        name = "karthik-pro-engr",
                         id = 101930095,
-                        avatarUrl = "https://avatars.githubusercontent.com/u/101930095?v=",
+                        profilePictureUrl = "https://avatars.githubusercontent.com/u/101930095?v=",
                         htmlUrl = "https://github.com/karthik-pro-engr"
                     )
                 )
