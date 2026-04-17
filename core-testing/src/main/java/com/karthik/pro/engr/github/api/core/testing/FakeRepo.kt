@@ -12,8 +12,8 @@ object FakeRepo {
         description: String = "",
         htmlUrl: String = "https://github.com/karthik-pro-engr",
         language: String = "Shell",
-        stars: Int = 0,
-        forks: Int = 0,
+        stars: Int = 5,
+        forks: Int = 1,
         languagesUrl: String = "https://api.github.com/repos/karthik-pro-engr/admin-tools/languages",
         owner: Owner = owner()
     ): Repo = Repo(

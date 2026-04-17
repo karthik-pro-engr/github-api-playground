@@ -15,8 +15,6 @@ kotlin {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.material)
 
     implementation(libs.kotlinx.coroutines.test)
     implementation(libs.junit)
