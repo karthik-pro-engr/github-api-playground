@@ -14,6 +14,21 @@ object FakeRepo {
         language: String = "Shell",
         stars: Int = 5,
         forks: Int = 1,
+        topics: List<String> = listOf(
+            "android",
+            "android-arcchitecture",
+            "api-integration",
+            "clean-architecture",
+            "coroutines",
+            "hilt",
+            "jetpack-compose",
+            "kotlin",
+            "mock-webserver",
+            "okhttp",
+            "retrofit2",
+            "room",
+            "unit-testing"
+        ),
         languagesUrl: String = "https://api.github.com/repos/karthik-pro-engr/admin-tools/languages",
         owner: Owner = owner()
     ): Repo = Repo(
@@ -25,6 +40,7 @@ object FakeRepo {
         language = language,
         stars = stars,
         forks = forks,
+        topics = topics,
         languagesUrl = languagesUrl,
         owner = owner
     )

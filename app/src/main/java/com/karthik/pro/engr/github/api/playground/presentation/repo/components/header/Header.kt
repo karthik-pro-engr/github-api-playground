@@ -13,36 +13,37 @@ import com.karthik.pro.engr.github.api.playground.presentation.repo.RepoDetailTe
 import com.karthik.pro.engr.github.api.playground.presentation.repo.RepoDetailTestTags.HEADER
 import com.karthik.pro.engr.github.api.playground.presentation.repo.RepoDetailTestTags.OWNER
 import com.karthik.pro.engr.github.api.playground.presentation.repo.RepoDetailTestTags.TITLE
+import com.karthik.pro.engr.github.api.playground.presentation.repo.components.header.model.HeaderUi
 
 @Composable
 fun Header(
     modifier: Modifier = Modifier,
-    owner: String,
-    title: String,
-    description: String
+    headerUi: HeaderUi
 ) {
     Column(
         modifier = Modifier.testTag(HEADER)
     ) {
-        Text(
-            modifier = Modifier
-                .testTag(OWNER)
-                .padding(5.dp),
-            text = owner,
-            style = MaterialTheme.typography.headlineSmall
-        )
-        Text(
-            modifier = Modifier
-                .testTag(TITLE)
-                .padding(5.dp),
-            text = title, style = MaterialTheme.typography.headlineLarge
-        )
-        Text(
-            modifier = Modifier
-                .testTag(DESCRIPTION)
-                .padding(5.dp),
-            text = description, style = MaterialTheme.typography.bodyMedium
-        )
+        with(headerUi) {
+            Text(
+                modifier = Modifier
+                    .testTag(OWNER)
+                    .padding(5.dp),
+                text = owner,
+                style = MaterialTheme.typography.headlineSmall
+            )
+            Text(
+                modifier = Modifier
+                    .testTag(TITLE)
+                    .padding(5.dp),
+                text = title, style = MaterialTheme.typography.headlineLarge
+            )
+            Text(
+                modifier = Modifier
+                    .testTag(DESCRIPTION)
+                    .padding(5.dp),
+                text = description, style = MaterialTheme.typography.bodyMedium
+            )
+        }
     }
 }
 
@@ -50,8 +51,10 @@ fun Header(
 @Composable
 private fun HeaderPreview() {
     Header(
-        owner = "Karthik-pro-engr",
-        title = "Github-Api-Playground",
-        description = "Simple URL shortener for ActionBarSherlock using node.js and express."
+        headerUi = HeaderUi(
+            owner = "Karthik-pro-engr",
+            title = "Github-Api-Playground",
+            description = "Simple URL shortener for ActionBarSherlock using node.js and express."
+        )
     )
 }

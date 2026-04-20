@@ -10,5 +10,6 @@ data class Repo(
     val languagesUrl:String,
     val stars: Int,
     val forks: Int,
+    val topics: List<String>,
     val owner: Owner
 )
