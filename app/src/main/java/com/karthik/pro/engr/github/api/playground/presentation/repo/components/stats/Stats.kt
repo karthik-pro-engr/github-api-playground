@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,34 +16,48 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.karthik.pro.engr.devtools.AllVariantsPreview
+import com.karthik.pro.engr.github.api.playground.presentation.designsystem.Dimens
 import com.karthik.pro.engr.github.api.playground.presentation.repo.RepoDetailTestTags.FORKS
 import com.karthik.pro.engr.github.api.playground.presentation.repo.RepoDetailTestTags.STARS
 
 @Composable
 fun Stats(
     modifier: Modifier = Modifier,
-    stars: String,
-    forks: String
+    statsUi: StatsUi
 ) {
     Row(
+        modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(
-            space = 12.dp
+            space = Dimens.medium, alignment = Alignment.CenterHorizontally
         )
     ) {
-        StatCard("Stars", stars, tag = STARS)
-        StatCard("Forks", forks, FORKS)
+        with(statsUi) {
+            StatCard("Stars", stars, tag = STARS)
+            StatCard("Forks", forks, FORKS)
+        }
     }
 }
 
 @Composable
-fun StatCard(label: String, value: String, tag: String) {
+fun StatCard(
+    label: String, value: String, tag: String,
+    modifier: Modifier = Modifier
+) {
     Card(
-        modifier = Modifier
-            .testTag(tag)
+        modifier = modifier
+            .testTag(tag),
+        shape = RoundedCornerShape(16.dp)
     ) {
-        Column(Modifier.padding(12.dp)) {
-            Text(value, fontWeight = FontWeight.Bold)
-            Text(label)
+        Column(
+            modifier = Modifier.padding(Dimens.large),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = value,
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleLarge,
+            )
+            Text(label, style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
@@ -49,5 +65,5 @@ fun StatCard(label: String, value: String, tag: String) {
 @AllVariantsPreview
 @Composable
 private fun StatsPreview() {
-    Stats(stars = "16.4k", forks = "24.5k")
+    Stats(statsUi = StatsUi(stars = "16.4k", forks = "24.5k"))
 }

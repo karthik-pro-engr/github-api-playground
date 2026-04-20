@@ -15,6 +15,7 @@ object RepoMapper {
         languagesUrl = dto.languages_url,
         stars = dto.stargazers_count,
         forks = dto.forks_count,
+        topics = dto.topics,
         owner = Owner(
             name = dto.owner.login,
             id = dto.owner.id,

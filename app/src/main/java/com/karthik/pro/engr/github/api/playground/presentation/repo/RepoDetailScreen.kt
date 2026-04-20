@@ -1,113 +1,97 @@
 package com.karthik.pro.engr.github.api.playground.presentation.repo
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.karthik.pro.engr.devtools.AllVariantsPreview
-import com.karthik.pro.engr.github.api.domain.model.Owner
 import com.karthik.pro.engr.github.api.playground.presentation.components.ErrorUi
 import com.karthik.pro.engr.github.api.playground.presentation.components.FullScreenLoader
+import com.karthik.pro.engr.github.api.playground.presentation.components.SectionHeader
+import com.karthik.pro.engr.github.api.playground.presentation.designsystem.Dimens
+import com.karthik.pro.engr.github.api.playground.presentation.preview.fakeItems
 import com.karthik.pro.engr.github.api.playground.presentation.repo.components.header.Header
 import com.karthik.pro.engr.github.api.playground.presentation.repo.components.language.Language
-import com.karthik.pro.engr.github.api.playground.presentation.repo.components.language.model.LanguageUi
 import com.karthik.pro.engr.github.api.playground.presentation.repo.components.releases.ReleaseItem
-import com.karthik.pro.engr.github.api.playground.presentation.repo.components.releases.model.ReleaseUi
 import com.karthik.pro.engr.github.api.playground.presentation.repo.components.stats.Stats
-import com.karthik.pro.engr.github.api.playground.presentation.repo.model.RepoDetailUi
-import com.karthik.pro.engr.github.api.playground.presentation.uistate.ListUiState
+import com.karthik.pro.engr.github.api.playground.presentation.repo.components.topics.Topics
+import com.karthik.pro.engr.github.api.playground.presentation.repo.model.RepoDetailItemUi
+import com.karthik.pro.engr.github.api.playground.presentation.repo.model.key
 
 @Composable
 fun RepoDetailScreen(
     modifier: Modifier = Modifier,
-    uiState: RepoDetailUiState,
-    languageUiState: ListUiState<LanguageUi>,
-    onRetry: () -> Unit
+    items: List<RepoDetailItemUi>,
+    onRepoRetry: (String, String) -> Unit,
+    onLanguageRetry: (String, String) -> Unit,
+    onReleaseRetry: (String, String) -> Unit
 ) {
-    Box(
-        modifier = modifier.fillMaxSize()
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        contentPadding = PaddingValues(vertical = Dimens.large)
     ) {
-        when (uiState) {
-            is RepoDetailUiState.Error -> ErrorUi(error = uiState.message, onClick = onRetry)
-            RepoDetailUiState.Loading -> FullScreenLoader()
-            is RepoDetailUiState.Success -> {
-                with(uiState.data) {
-                    LazyColumn {
-                        item {
-                            Header(
-                                owner = owner.name,
-                                title = name,
-                                description = description.orEmpty()
-                            )
-                        }
+        items(
+            items = items,
+            key = { item -> item.key() }
+        ) { repoDetailItemUi ->
 
-                        item {
-                            Stats(
-                                stars = stars,
-                                forks = forks
-                            )
-                        }
+            when (repoDetailItemUi) {
+                is RepoDetailItemUi.SectionTitle -> SectionHeader(repoDetailItemUi.title)
 
-                        item {
-                            Language(
-                                uiState = languageUiState
-                            )
-                        }
+                is RepoDetailItemUi.HeaderError -> ErrorUi(
+                    error = repoDetailItemUi.message,
+                    onClick = { onRepoRetry("", "") }
+                )
 
-                        item {
-                            Text("Releases", style = MaterialTheme.typography.headlineMedium)
-                        }
+                RepoDetailItemUi.HeaderLoading -> FullScreenLoader()
 
-                        items(
-                            items = releases,
-                            key = { it.id }
-                        ) { release ->
-                            ReleaseItem(release) { println() }
-                        }
-                    }
+                is RepoDetailItemUi.HeaderSuccess -> Header(
+                    headerUi = repoDetailItemUi.data
+                )
+
+                is RepoDetailItemUi.Stats -> Stats(statsUi = repoDetailItemUi.statsUi)
+
+                is RepoDetailItemUi.Topics -> Topics(topics = repoDetailItemUi.topics)
+
+                is RepoDetailItemUi.LanguageError -> ErrorUi(
+                    error = repoDetailItemUi.message,
+                    onClick = { onLanguageRetry("", "") }
+                )
+
+                RepoDetailItemUi.LanguageLoading -> CircularProgressIndicator()
+
+                is RepoDetailItemUi.LanguageSuccess -> {
+                    Language(languagesList = repoDetailItemUi.data)
                 }
+
+
+                is RepoDetailItemUi.ReleaseError -> ErrorUi(
+                    error = repoDetailItemUi.message,
+                    onClick = { onReleaseRetry("", "") }
+                )
+
+                RepoDetailItemUi.ReleaseLoading -> CircularProgressIndicator()
+
+                is RepoDetailItemUi.ReleaseSuccess -> {
+                    ReleaseItem(repoDetailItemUi.data) { }
+                }
+
             }
         }
     }
-
 }
 
 @AllVariantsPreview
 @Composable
 private fun RepoListScreenPreview() {
     RepoDetailScreen(
-        languageUiState = ListUiState.Loading,
-        onRetry = {},
-        uiState = RepoDetailUiState.Success(
-            RepoDetailUi(
-                id = 1,
-                name = "admin-tools",
-                fullName = "karthik-pro-engr/admin-tools",
-                description = "Automates applying branch rulesets to new repositories.",
-                htmlUrl = "https://github.com/karthik-pro-engr/admin-tools",
-                language = "Shell",
-                stars = "5.6k",
-                forks = "1.23k",
-                languagesUrl = "https://api.github.com/repos/karthik-pro-engr/github-api-playground/languages",
-                owner = Owner(
-                    name = "karthik-pro-engr",
-                    id = 101930095,
-                    profilePictureUrl = "https://avatars.githubusercontent.com/u/101930095?v=",
-                    htmlUrl = "https://github.com/karthik-pro-engr"
-                ),
-                releases = listOf(
-                    ReleaseUi(1234, "v1.0.0", "Yesterday", true),
-                    ReleaseUi(12345, "v1.0.0", "Yesterday", true),
-                    ReleaseUi(12346, "v1.0.0", "Yesterday", true),
-                    ReleaseUi(12347, "v1.0.0", "Yesterday", true),
-                    ReleaseUi(12348, "v1.0.0", "Yesterday", true)
-                )
-            )
-        )
+        items = fakeItems(),
+        onRepoRetry = { owner, repoName -> },
+        onLanguageRetry = { owner, repoName -> },
+        onReleaseRetry = { owner, repoName -> },
     )
 
 }

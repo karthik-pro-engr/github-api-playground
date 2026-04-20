@@ -1,7 +1,6 @@
 package com.karthik.pro.engr.github.api.playground.presentation.repo.model
 
 import com.karthik.pro.engr.github.api.domain.model.Owner
-import com.karthik.pro.engr.github.api.playground.presentation.repo.components.releases.model.ReleaseUi
 
 data class RepoDetailUi(
     val id: Long,
@@ -13,6 +12,6 @@ data class RepoDetailUi(
     val languagesUrl:String,
     val stars: String,
     val forks: String,
-    val releases: List<ReleaseUi>,
+    val topics:List<String>,
     val owner: Owner
 )

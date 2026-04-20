@@ -27,4 +27,7 @@
     <string name="retry">Retry</string>
     <string name="no_repos_found">No repos found</string>
     <string name="latest">LATEST</string>
+    <string name="releases">Releases</string>
+    <string name="languages">Languages</string>
+    <string name="topics">Topics</string>
 </resources>
