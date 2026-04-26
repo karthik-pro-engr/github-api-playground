@@ -1,6 +1,5 @@
 package com.karthik.pro.engr.github.api.playground.presentation.repo.components.releases
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,12 +18,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.karthik.pro.engr.devtools.AllVariantsPreview
 import com.karthik.pro.engr.github.api.core.testing.RepoFactory
+import com.karthik.pro.engr.github.api.domain.time.RelativeTime
 import com.karthik.pro.engr.github.api.playground.R
 import com.karthik.pro.engr.github.api.playground.presentation.common.formatter.RelativeTimeFormatter
 import com.karthik.pro.engr.github.api.playground.presentation.components.Badge
@@ -32,6 +32,8 @@ import com.karthik.pro.engr.github.api.playground.presentation.designsystem.Dime
 import com.karthik.pro.engr.github.api.playground.presentation.repo.RepoDetailTestTags.RELEASE_ITEM
 import com.karthik.pro.engr.github.api.playground.presentation.repo.components.releases.model.ReleaseUi
 import com.karthik.pro.engr.github.api.playground.presentation.repo.mapper.toReleaseUi
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun ReleaseItem(
@@ -68,7 +70,7 @@ fun ReleaseItem(
                     }
                 }
                 Spacer(modifier = Modifier.height(Dimens.xs))
-                Text(release.date, style = MaterialTheme.typography.bodySmall)
+                Text(release.date.toUiString(), style = MaterialTheme.typography.bodySmall)
             }
             IconButton(onClick = onClick) {
                 Icon(
@@ -77,6 +79,32 @@ fun ReleaseItem(
                 )
             }
         }
+    }
+}
+
+
+@Composable
+fun RelativeTime.toUiString(): String {
+    return when (this) {
+        RelativeTime.JustNow -> stringResource(R.string.just_now)
+
+        is RelativeTime.MinutesAgo ->
+            pluralStringResource(R.plurals.minutes_ago, value.toInt(), value)
+
+        is RelativeTime.HoursAgo -> pluralStringResource(R.plurals.hours_ago, value.toInt(), value)
+
+        is RelativeTime.DaysAgo -> stringResource(R.string.days_ago, value)
+
+        is RelativeTime.Yesterday -> stringResource(R.string.yesterday)
+
+        is RelativeTime.Date -> {
+            val formatter = DateTimeFormatter
+                .ofPattern("MMM d, yyyy")
+                .withZone(ZoneId.systemDefault())
+
+            formatter.format(value)
+        }
+
     }
 }
 
