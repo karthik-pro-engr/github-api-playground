@@ -19,6 +19,8 @@ import com.karthik.pro.engr.github.api.playground.presentation.repo.mapper.toRep
 import com.karthik.pro.engr.github.api.playground.presentation.repo.model.RepoDetailItemUi
 import com.karthik.pro.engr.github.api.playground.presentation.uistate.ListUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -45,6 +47,10 @@ class RepoDetailViewModel @Inject constructor(
     private val _releasesUiState: MutableStateFlow<ListUiState<ReleaseUi>> =
         MutableStateFlow(ListUiState.Loading)
     val releasesUiState = _releasesUiState.asStateFlow()
+
+    private var languageJob: Job? = null
+    private var releaseJob: Job? = null
+
 
     private val _items: StateFlow<List<RepoDetailItemUi>> =
         combine(
@@ -82,12 +88,12 @@ class RepoDetailViewModel @Inject constructor(
                                     forks
                                 )
                             )
-                        items+= RepoDetailItemUi.SectionTitle(UiText.StringRes(R.string.topics))
+                        items += RepoDetailItemUi.SectionTitle(UiText.StringRes(R.string.topics))
 
                         items += RepoDetailItemUi.Topics(topics)
                     }
 
-                    items+= RepoDetailItemUi.SectionTitle(UiText.StringRes(R.string.languages))
+                    items += RepoDetailItemUi.SectionTitle(UiText.StringRes(R.string.languages))
 
                     items += when (language) {
                         is ListUiState.Loading -> {
@@ -104,11 +110,15 @@ class RepoDetailViewModel @Inject constructor(
                             RepoDetailItemUi.LanguageSuccess(language.data)
                         }
                     }
-                    items+= RepoDetailItemUi.SectionTitle(UiText.StringRes(R.string.releases))
+                    items += RepoDetailItemUi.SectionTitle(UiText.StringRes(R.string.releases))
 
                     when (releases) {
                         is ListUiState.Error -> {
-                            items += RepoDetailItemUi.ReleaseError(ApiErrorMapper.parseError(releases.error))
+                            items += RepoDetailItemUi.ReleaseError(
+                                ApiErrorMapper.parseError(
+                                    releases.error
+                                )
+                            )
                         }
 
                         ListUiState.Loading -> {
@@ -145,14 +155,25 @@ class RepoDetailViewModel @Inject constructor(
     fun retryReleases(owner: String, repoName: String) = loadReleases(owner, repoName)
 
     private fun loadRepoDetail(owner: String, repoName: String) {
+        // Cancel dependent jobs
+        languageJob?.cancel()
+        releaseJob?.cancel()
+
+        _repoUiState.value = RepoDetailUiState.Loading
+        _languageUiState.value = ListUiState.Loading
+        _releasesUiState.value = ListUiState.Loading
+
         viewModelScope.launch {
             try {
 
                 val repo = getRepoDetailUseCase(owner, repoName).first()
                 _repoUiState.value = RepoDetailUiState.Success(repo.toRepoDetailUi())
 
-                loadLanguages("", "")
-                loadReleases("", "")
+                coroutineScope {
+                    launch { loadLanguages(owner, repo) }
+                    launch { loadReleases(owner, repo) }
+                }
+
             } catch (e: Exception) {
                 _repoUiState.value = RepoDetailUiState.Error("")
             }
@@ -162,7 +183,8 @@ class RepoDetailViewModel @Inject constructor(
     }
 
     private fun loadLanguages(owner: String, repoName: String) {
-        viewModelScope.launch {
+        languageJob?.cancel()
+        languageJob = viewModelScope.launch {
             try {
 
                 val languages = getLanguageUseCase(owner, repoName).first()
@@ -176,8 +198,8 @@ class RepoDetailViewModel @Inject constructor(
     }
 
     private fun loadReleases(ownerName: String, repoName: String) {
-
-        viewModelScope.launch {
+        releaseJob?.cancel()
+        releaseJob = viewModelScope.launch {
             try {
                 val releases = getReleasesUseCase(ownerName, repoName).first()
 
