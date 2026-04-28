@@ -170,8 +170,8 @@ class RepoDetailViewModel @Inject constructor(
                 _repoUiState.value = RepoDetailUiState.Success(repo.toRepoDetailUi())
 
                 coroutineScope {
-                    launch { loadLanguages(owner, repo) }
-                    launch { loadReleases(owner, repo) }
+                    launch { loadLanguages(owner, repoName) }
+                    launch { loadReleases(owner, repoName) }
                 }
 
             } catch (e: Exception) {
@@ -211,7 +211,7 @@ class RepoDetailViewModel @Inject constructor(
                 _releasesUiState.value = ListUiState.Success(releaseUis)
 
             } catch (e: Exception) {
-                ListUiState.Error(DomainError.Unknown)
+                _releasesUiState.value = ListUiState.Error(DomainError.Unknown)
             }
         }
     }
