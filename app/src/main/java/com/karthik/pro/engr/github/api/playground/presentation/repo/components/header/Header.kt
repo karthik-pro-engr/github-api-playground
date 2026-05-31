@@ -33,12 +33,6 @@ fun Header(
             )
             Text(
                 modifier = Modifier
-                    .testTag(TITLE)
-                    .padding(5.dp),
-                text = title, style = MaterialTheme.typography.headlineLarge
-            )
-            Text(
-                modifier = Modifier
                     .testTag(DESCRIPTION)
                     .padding(5.dp),
                 text = description, style = MaterialTheme.typography.bodyMedium

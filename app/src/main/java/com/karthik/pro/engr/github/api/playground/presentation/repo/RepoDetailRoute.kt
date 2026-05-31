@@ -9,13 +9,17 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 @Composable
 fun RepoDetailRoute(
     modifier: Modifier = Modifier,
-    viewModel: RepoDetailViewModel = hiltViewModel()
+    viewModel: RepoDetailViewModel = hiltViewModel(),
+    onBack: () -> Unit
 ) {
     val items by viewModel.uiItems.collectAsState()
 
     RepoDetailScreen(
         modifier = modifier,
-        items = items, onRepoRetry = viewModel::retryRepoDetail,
+        items = items,
+        repoName = viewModel.repoName,
+        onBack = onBack,
+        onRepoRetry = viewModel::retryRepoDetail,
         onLanguageRetry = viewModel::retryLanguages,
         onReleaseRetry = viewModel::retryReleases
     )

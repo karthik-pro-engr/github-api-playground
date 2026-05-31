@@ -43,6 +43,7 @@ fun RepoListScreen(
     modifier: Modifier = Modifier,
     currentQuery: String?,
     reposSharedFlow: Flow<PagingData<Repo>>,
+    onRepoClick: (String, String) -> Unit,
     onSubmit: (String) -> Unit,
 ) {
 
@@ -51,6 +52,29 @@ fun RepoListScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
+
+        Text(
+            text = stringResource(
+                R.string.github_repo_explorer
+            ),
+
+            style =
+                MaterialTheme.typography.headlineSmall
+        )
+
+        Text(
+            text = stringResource(
+                R.string.enter_github_username
+            ),
+
+            style =
+                MaterialTheme.typography.bodyMedium,
+
+            color =
+                MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Spacer(Modifier.height(24.dp))
 
         ReposSearchByUserName(
             currentQuery = currentQuery,
@@ -82,7 +106,8 @@ fun RepoListScreen(
                 }
             }) { repo ->
                 RepoListItem(
-                    repo = repo
+                    repo = repo,
+                    onRepoClick = onRepoClick
                 )
             }
 
@@ -128,7 +153,7 @@ fun ReposSearchByUserName(
 private fun RepoListScreenPreview() {
     val reposSharedFlow = flowOf(
         PagingData.from(
-            List(10){
+            List(10) {
                 RepoFactory.withId(Random.nextLong())
             }
         )
@@ -136,6 +161,6 @@ private fun RepoListScreenPreview() {
     RepoListScreen(
         currentQuery = "",
         reposSharedFlow = reposSharedFlow,
-        onSubmit = { println("clicked") }
-    )
+        onRepoClick = { _,_ -> }
+    ) { println("clicked") }
 }

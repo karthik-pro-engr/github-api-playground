@@ -2,12 +2,25 @@ package com.karthik.pro.engr.github.api.playground.presentation.repo
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.karthik.pro.engr.devtools.AllVariantsPreview
+import com.karthik.pro.engr.github.api.playground.R
 import com.karthik.pro.engr.github.api.playground.presentation.components.ErrorUi
 import com.karthik.pro.engr.github.api.playground.presentation.components.FullScreenLoader
 import com.karthik.pro.engr.github.api.playground.presentation.components.SectionHeader
@@ -21,66 +34,105 @@ import com.karthik.pro.engr.github.api.playground.presentation.repo.components.t
 import com.karthik.pro.engr.github.api.playground.presentation.repo.model.RepoDetailItemUi
 import com.karthik.pro.engr.github.api.playground.presentation.repo.model.key
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RepoDetailScreen(
     modifier: Modifier = Modifier,
     items: List<RepoDetailItemUi>,
-    onRepoRetry: (String, String) -> Unit,
-    onLanguageRetry: (String, String) -> Unit,
-    onReleaseRetry: (String, String) -> Unit
+    repoName: String,
+    onBack: () -> Unit,
+    onRepoRetry: () -> Unit,
+    onLanguageRetry: () -> Unit,
+    onReleaseRetry: () -> Unit
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(vertical = Dimens.large)
-    ) {
-        items(
-            items = items,
-            key = { item -> item.key() }
-        ) { repoDetailItemUi ->
-
-            when (repoDetailItemUi) {
-                is RepoDetailItemUi.SectionTitle -> SectionHeader(repoDetailItemUi.title)
-
-                is RepoDetailItemUi.HeaderError -> ErrorUi(
-                    error = repoDetailItemUi.message,
-                    onClick = { onRepoRetry("", "") }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(
+                        text = repoName
+                    )
+                },
+                navigationIcon = {
+                    IconButton(
+                        onClick = onBack
+                    ) {
+                        Icon(
+                            imageVector =
+                                Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor =
+                        MaterialTheme.colorScheme.surface
                 )
-
-                RepoDetailItemUi.HeaderLoading -> FullScreenLoader()
-
-                is RepoDetailItemUi.HeaderSuccess -> Header(
-                    headerUi = repoDetailItemUi.data
-                )
-
-                is RepoDetailItemUi.Stats -> Stats(statsUi = repoDetailItemUi.statsUi)
-
-                is RepoDetailItemUi.Topics -> Topics(topics = repoDetailItemUi.topics)
-
-                is RepoDetailItemUi.LanguageError -> ErrorUi(
-                    error = repoDetailItemUi.message,
-                    onClick = { onLanguageRetry("", "") }
-                )
-
-                RepoDetailItemUi.LanguageLoading -> CircularProgressIndicator()
-
-                is RepoDetailItemUi.LanguageSuccess -> {
-                    Language(languagesList = repoDetailItemUi.data)
-                }
-
-
-                is RepoDetailItemUi.ReleaseError -> ErrorUi(
-                    error = repoDetailItemUi.message,
-                    onClick = { onReleaseRetry("", "") }
-                )
-
-                RepoDetailItemUi.ReleaseLoading -> CircularProgressIndicator()
-
-                is RepoDetailItemUi.ReleaseSuccess -> {
-                    ReleaseItem(repoDetailItemUi.data) { }
-                }
-
-            }
+            )
         }
+    ) {
+        innerPadding ->
+
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            contentPadding = PaddingValues(vertical = Dimens.large)
+        ) {
+
+
+            items(
+                items = items,
+                key = { item -> item.key() }
+            ) { repoDetailItemUi ->
+
+
+                when (repoDetailItemUi) {
+                    is RepoDetailItemUi.SectionTitle -> SectionHeader(repoDetailItemUi.title)
+
+                    is RepoDetailItemUi.HeaderError -> ErrorUi(
+                        error = repoDetailItemUi.message,
+                        onClick = onRepoRetry
+                    )
+
+                    RepoDetailItemUi.HeaderLoading -> FullScreenLoader()
+
+                    is RepoDetailItemUi.HeaderSuccess -> Header(
+                        headerUi = repoDetailItemUi.data
+                    )
+
+                    is RepoDetailItemUi.Stats -> Stats(statsUi = repoDetailItemUi.statsUi)
+
+                    is RepoDetailItemUi.Topics -> Topics(topics = repoDetailItemUi.topics)
+
+                    is RepoDetailItemUi.LanguageError -> ErrorUi(
+                        error = repoDetailItemUi.message,
+                        onClick = onLanguageRetry
+                    )
+
+                    RepoDetailItemUi.LanguageLoading -> CircularProgressIndicator()
+
+                    is RepoDetailItemUi.LanguageSuccess -> {
+                        Language(languagesList = repoDetailItemUi.data)
+                    }
+
+
+                    is RepoDetailItemUi.ReleaseError -> ErrorUi(
+                        error = repoDetailItemUi.message,
+                        onClick = onReleaseRetry
+                    )
+
+                    RepoDetailItemUi.ReleaseLoading -> CircularProgressIndicator()
+
+                    is RepoDetailItemUi.ReleaseSuccess -> {
+                        ReleaseItem(repoDetailItemUi.data) { }
+                    }
+
+                }
+            }
+
+        }
+
     }
 }
 
@@ -89,9 +141,11 @@ fun RepoDetailScreen(
 private fun RepoListScreenPreview() {
     RepoDetailScreen(
         items = fakeItems(),
-        onRepoRetry = { owner, repoName -> },
-        onLanguageRetry = { owner, repoName -> },
-        onReleaseRetry = { owner, repoName -> },
+        repoName = "Github-api-playground",
+        onBack = {},
+        onRepoRetry = {},
+        onLanguageRetry = {},
+        onReleaseRetry = {},
     )
 
 }

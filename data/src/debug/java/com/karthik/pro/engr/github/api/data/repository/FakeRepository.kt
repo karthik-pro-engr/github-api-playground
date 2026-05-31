@@ -12,9 +12,13 @@ import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
 class FakeRepository @Inject constructor() : GithubRepository {
-    override fun getUserRepos(username: String): Flow<PagingData<Repo>> {
-        TODO("Not yet implemented")
-    }
+    override fun getUserRepos(username: String): Flow<PagingData<Repo>> = flowOf(
+        PagingData.from(
+            listOf(
+                RepoFactory.defaultRepo()
+            )
+        )
+    )
 
     override fun getRepoDetail(
         ownerName: String,

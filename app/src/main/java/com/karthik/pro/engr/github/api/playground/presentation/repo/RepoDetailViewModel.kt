@@ -1,7 +1,10 @@
 package com.karthik.pro.engr.github.api.playground.presentation.repo
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.karthik.pro.engr.github.api.core.testing.RepoFactory
+import com.karthik.pro.engr.github.api.data.remote.mapper.toLanguageList
 import com.karthik.pro.engr.github.api.domain.error.DomainError
 import com.karthik.pro.engr.github.api.domain.model.Language
 import com.karthik.pro.engr.github.api.domain.usecase.GetLanguageUseCase
@@ -11,6 +14,8 @@ import com.karthik.pro.engr.github.api.playground.R
 import com.karthik.pro.engr.github.api.playground.presentation.common.UiText
 import com.karthik.pro.engr.github.api.playground.presentation.common.formatter.RelativeTimeFormatter
 import com.karthik.pro.engr.github.api.playground.presentation.error.ApiErrorMapper
+import com.karthik.pro.engr.github.api.playground.presentation.navigation.AppDestinations.REPO_NAME_ARG
+import com.karthik.pro.engr.github.api.playground.presentation.navigation.AppDestinations.REPO_OWNER_ARG
 import com.karthik.pro.engr.github.api.playground.presentation.repo.components.header.model.HeaderUi
 import com.karthik.pro.engr.github.api.playground.presentation.repo.components.releases.model.ReleaseUi
 import com.karthik.pro.engr.github.api.playground.presentation.repo.components.stats.StatsUi
@@ -33,10 +38,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RepoDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val getRepoDetailUseCase: GetRepoDetailUseCase,
     private val getLanguageUseCase: GetLanguageUseCase,
     private val getReleasesUseCase: GetReleasesUseCase
 ) : ViewModel() {
+
+    private val owner: String = savedStateHandle[REPO_OWNER_ARG] ?: ""
+    val repoName: String = savedStateHandle[REPO_NAME_ARG] ?: ""
+
 
     private var _repoUiState = MutableStateFlow<RepoDetailUiState>(RepoDetailUiState.Loading)
     val repoUiState = _repoUiState.asStateFlow()
@@ -146,13 +156,36 @@ class RepoDetailViewModel @Inject constructor(
 
 
     init {
-        loadRepoDetail("", "")
+
+
+            _repoUiState.value =
+                RepoDetailUiState.Success(
+                    RepoFactory.defaultRepo()
+                        .toRepoDetailUi()
+                )
+
+            _languageUiState.value =
+                ListUiState.Success(
+                    RepoFactory.defaultLanguages()
+                        .toLanguageList()
+                )
+
+            _releasesUiState.value =
+                ListUiState.Success(
+                    RepoFactory.defaultReleases().map {
+                        it.toReleaseUi(
+                            RelativeTimeFormatter()
+                        )
+                    }
+                )
+
+//        loadRepoDetail(owner, repoName)
     }
 
 
-    fun retryRepoDetail(owner: String, repoName: String) = loadRepoDetail(owner, repoName)
-    fun retryLanguages(owner: String, repoName: String) = loadLanguages(owner, repoName)
-    fun retryReleases(owner: String, repoName: String) = loadReleases(owner, repoName)
+    fun retryRepoDetail() = loadRepoDetail(owner, repoName)
+    fun retryLanguages() = loadLanguages(owner, repoName)
+    fun retryReleases() = loadReleases(owner, repoName)
 
     private fun loadRepoDetail(owner: String, repoName: String) {
         // Cancel dependent jobs
