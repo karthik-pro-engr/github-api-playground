@@ -16,12 +16,12 @@ The application integrates with the GitHub API and is designed as a real-world A
 | UI | Jetpack Compose |
 | Architecture | MVVM + Clean Architecture |
 | Modules | app, domain, data, core, core-testing |
-| API Integration | GitHub REST API |
+| API Integration | GitHub REST API for repos, details, languages, and releases |
 | Pagination | Paging 3 |
 | Dependency Injection | Hilt |
 | CI/CD | GitHub Actions + Firebase App Distribution |
 | Current Build | Debug build verified |
-| Current Test Status | Unit test suite needs minor test-signature fix |
+| Current Test Status | Focused unit coverage added for paging, repo detail, mappers, and formatters |
 
 ---
 
@@ -98,7 +98,10 @@ The application integrates with the GitHub API and is designed as a real-world A
 * Modern Compose UI
 * Loading, empty, and error states
 * Retry-ready paging UI structure
-* Repository detail screen structure
+* API-backed repository detail screen
+* Repository stats, topics, language breakdown, and release list
+* Readable count, percentage, and relative time formatting
+* Section-level retry handling for detail, languages, and releases
 * Deep link support for repository detail route
 * Multi-module project structure
 * Firebase beta distribution workflow
@@ -116,10 +119,12 @@ The application integrates with the GitHub API and is designed as a real-world A
 | Username search | Implemented |
 | Paging support | Implemented |
 | GitHub repo list API path | Implemented and tested |
-| Repository detail UI | Implemented with demo data |
-| Repository detail API | Planned |
-| Languages API | Planned |
-| Releases API | Planned |
+| Repository detail UI | Implemented |
+| Repository detail API | Implemented |
+| Languages API | Implemented |
+| Releases API | Implemented |
+| Navigation and repository detail deep links | Implemented |
+| Shared UI formatting | Implemented |
 | Room local cache | Planned |
 | WorkManager sync | Future improvement |
 
@@ -135,7 +140,7 @@ Jetpack Compose Screens
         |
         v
 ViewModel Layer
-StateFlow + PagingData
+StateFlow + PagingData + sectioned UI state
         |
         v
 Domain Layer
@@ -150,7 +155,7 @@ Remote Layer
 Retrofit + OkHttp + GitHub API
 ```
 
-Current app runtime uses a fake repository for deterministic UI development, while the real GitHub paging implementation exists in the data layer and is covered by tests.
+Current app runtime is wired to the real `GithubRepositoryImpl`. Debug and test fakes remain available for previews, deterministic test data, and isolated ViewModel coverage.
 
 ---
 
@@ -158,15 +163,15 @@ Current app runtime uses a fake repository for deterministic UI development, whi
 
 ## app
 
-Application entry point, Compose UI, navigation, ViewModels, Hilt bindings, and build-variant behavior.
+Application entry point, Compose UI, navigation, ViewModels, Hilt bindings, formatting helpers, and build-variant behavior.
 
 ## domain
 
-Business models, repository contracts, use cases, pagination constants, and domain error types.
+Business models, repository contracts, repo list/detail use cases, release and language use cases, pagination constants, relative time models, and domain error types.
 
 ## data
 
-Retrofit service, repository implementation, DTO mapping, network error parsing, and PagingSource implementation.
+Retrofit service, repository implementation, DTO mapping, repo detail/language/release endpoints, network error parsing, and PagingSource implementation.
 
 ## core
 
@@ -174,11 +179,13 @@ Shared Android and dependency injection utilities.
 
 ## core-testing
 
-Shared test factories, fake data, and coroutine test helpers.
+Shared test factories, fake repos, fake language/release data, and coroutine test helpers.
 
 ---
 
 # API Flow
+
+Repository list flow:
 
 ```text
 User enters GitHub username
@@ -205,6 +212,33 @@ GithubService
 GitHub REST API
 ```
 
+Repository detail flow:
+
+```text
+User selects a repository or opens a deep link
+        |
+        v
+AppNavHost
+        |
+        v
+RepoDetailRoute
+        |
+        v
+RepoDetailViewModel
+        |
+        v
+GetRepoDetailUseCase + GetLanguageUseCase + GetReleasesUseCase
+        |
+        v
+GithubRepository
+        |
+        v
+GithubService
+        |
+        v
+GitHub REST API
+```
+
 ---
 
 # Engineering Practices
@@ -215,7 +249,10 @@ GitHub REST API
 * Reactive UI state using Flow and StateFlow
 * Paging 3 based list loading
 * GitHub pagination using Link header parsing
+* Parallel loading for repository detail dependencies after the base repo succeeds
 * Structured error handling for API and IO failures
+* UI state modeled separately for repo detail, languages, and releases
+* Preview and test data factories for repeatable UI and ViewModel scenarios
 * Firebase App Distribution pipeline
 * Release signing automation
 * Conventional commit validation
@@ -230,7 +267,9 @@ GitHub REST API
 | Multi-module setup | Keeps UI, domain, data, and testing responsibilities separate |
 | Repository contract in domain | Makes the app easier to test and swap implementations |
 | Paging 3 | Handles large repo lists, load states, retry, and pagination lifecycle |
-| Fake repository during UI iteration | Keeps UI development deterministic while real API work evolves |
+| Real repository binding in app runtime | Keeps production behavior aligned with the GitHub API while retaining fakes for tests and previews |
+| Sectioned repository detail state | Allows repo metadata, languages, and releases to load, fail, and retry independently |
+| Relative time domain model | Keeps formatting testable and localization-friendly |
 | Firebase beta workflow | Supports production-style release and feedback loops |
 
 ---
@@ -278,12 +317,15 @@ The project includes tests for:
 * Repository paging emission
 * ViewModel query handling
 * Compose paging UI states
+* Repository detail ViewModel loading, success, error, and retry states
 * Formatter and mapper behavior
+* Readable number formatting and relative time boundaries
 
-Current note:
+Run locally with:
 
-* Debug build is verified.
-* Full unit test command currently needs a small fix in `RepoDetailViewModelTest` because the test constructor call is behind the ViewModel signature.
+```bash
+./gradlew test
+```
 
 ---
 
@@ -298,21 +340,19 @@ Recommended screenshots:
 * Loading state
 * Error state
 * Repository detail screen
+* Repository language breakdown
+* Repository releases list
 * Firebase beta feedback state
 
 ---
 
 # Roadmap
 
-* Wire real GitHub repository implementation into beta/release runtime
-* Implement repository detail API
-* Implement languages API
-* Implement releases API
 * Add Room database cache
 * Add WorkManager based background sync
-* Fix current test drift and make full test suite green
 * Add CI coverage reports
 * Add screenshots and demo APK link
+* Add richer release asset interactions from the detail screen
 
 ---
 
