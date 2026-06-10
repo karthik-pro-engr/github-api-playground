@@ -83,7 +83,7 @@ class RepoDetailViewModel @Inject constructor(
                         items +=
                             RepoDetailItemUi.HeaderSuccess(
                                 HeaderUi(
-                                    owner.name,
+                                    ownerName,
                                     name,
                                     description.orEmpty()
                                 )
