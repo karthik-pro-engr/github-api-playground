@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
     kotlin("kapt")
 }
 
@@ -66,6 +67,8 @@ dependencies {
     implementation(libs.room.ktx)
     implementation(libs.androidx.room.paging)
     ksp(libs.room.compiler)
+
+    implementation(libs.kotlinx.serialization.json)
 
 
     testImplementation(libs.junit)

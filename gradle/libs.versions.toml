@@ -51,6 +51,9 @@ pagingCommon = "3.4.2"
 pagingTesting = "3.3.0"
 pagingRuntimeKtx = "3.4.2"
 
+#Serialization
+serialization = "1.11.0"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 javax-inject = { module = "javax.inject:javax.inject", version.ref = "javaxInject" }
@@ -72,6 +75,7 @@ icons = { module = "androidx.compose.material:material-icons-extended", version.
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+
 
 #Karthik's Dependencies
 all-variants-preview = { group = "io.github.karthik-pro-engr", name = "preview", version.ref = "allVariantsPreview" }
@@ -116,6 +120,9 @@ hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", ve
 paging = { module = "androidx.paging:paging-compose", version.ref = "paging" }
 androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "pagingCommon" }
 
+#Serialization
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+
 
 # --- Testing ---
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
@@ -133,3 +140,4 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kapt" }
 firebase-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebase" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
